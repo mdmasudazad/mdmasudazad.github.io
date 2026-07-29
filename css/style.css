@@ -2145,10 +2145,12 @@ ul {
         gap: 18px;
     }
 
-    .hero-layout {
-        grid-template-columns: 1fr 0.8fr;
-        gap: 50px;
-    }
+    .hero{
+    display:grid;
+    grid-template-columns:55% 45%;
+    align-items:center;
+    gap:80px;
+}
 
     .hero h1 {
         font-size: clamp(3rem, 6vw, 5.2rem);
