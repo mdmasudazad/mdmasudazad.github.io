@@ -666,11 +666,14 @@ ul {
    7. HERO VISUAL
 ========================================================= */
 
+/* =========================================================
+   7. HERO VISUAL
+========================================================= */
+
 .hero-visual {
     position: relative;
-
-    min-height: 560px;
-
+    width: 100%; /* FORCES full column width */
+    min-height: 520px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -678,28 +681,23 @@ ul {
 
 .profile-frame {
     position: relative;
-
-    width: min(620px, 100%); /* CHANGED: was min(470px, 100%) */
+    width: 100%;
+    max-width: 500px; /* Adjust this number to scale photo size up/down */
     aspect-ratio: 1 / 1;
-
     display: grid;
     place-items: center;
 }
 
 .profile-frame::before {
     content: "";
-
     position: absolute;
     inset: 6%;
-
     border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(90, 168, 255, 0.1),
-            transparent 64%
-        );
+    background: radial-gradient(
+        circle,
+        rgba(90, 168, 255, 0.1),
+        transparent 64%
+    );
 }
 
 .profile-ring {
