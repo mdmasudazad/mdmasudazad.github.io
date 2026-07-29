@@ -670,34 +670,42 @@ ul {
    7. HERO VISUAL
 ========================================================= */
 
+/* =========================================================
+   FORCE HERO SIDE-BY-SIDE LAYOUT (ADD AT VERY BOTTOM OF CSS)
+========================================================= */
+
+.hero-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 40px !important;
+}
+
+.hero-content {
+    flex: 0 0 55% !important;
+    max-width: 55% !important;
+}
+
 .hero-visual {
-    position: relative;
-    width: 100%; /* FORCES full column width */
-    min-height: 520px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 40% !important;
+    max-width: 40% !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .profile-frame {
-    position: relative;
-    width: 100%;
-    max-width: 500px; /* Adjust this number to scale photo size up/down */
-    aspect-ratio: 1 / 1;
-    display: grid;
-    place-items: center;
+    width: 100% !important;
+    max-width: 450px !important;
+    aspect-ratio: 1 / 1 !important;
 }
 
-.profile-frame::before {
-    content: "";
-    position: absolute;
-    inset: 6%;
-    border-radius: 50%;
-    background: radial-gradient(
-        circle,
-        rgba(90, 168, 255, 0.1),
-        transparent 64%
-    );
+.profile-image {
+    width: 85% !important;
+    height: 85% !important;
 }
 
 .profile-ring {
