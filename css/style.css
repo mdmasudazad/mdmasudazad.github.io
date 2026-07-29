@@ -485,11 +485,11 @@ ul {
     position: relative;
 
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1fr 1fr; /* CHANGED: was 1.1fr 0.9fr */
 
     align-items: center;
 
-    gap: 100px;
+    gap: 60px; /* CHANGED: was 100px to allow more room */
 }
 
 .hero-content {
@@ -679,7 +679,7 @@ ul {
 .profile-frame {
     position: relative;
 
-    width: min(470px, 100%);
+    width: min(620px, 100%); /* CHANGED: was min(470px, 100%) */
     aspect-ratio: 1 / 1;
 
     display: grid;
@@ -720,8 +720,8 @@ ul {
 .profile-image {
     position: relative;
 
-    width: 77%;
-    height: 77%;
+    width: 88%; /* CHANGED: was 77% */
+    height: 88%; /* CHANGED: was 77% */
 
     object-fit: cover;
 
