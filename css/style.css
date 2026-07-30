@@ -485,11 +485,11 @@ ul {
     position: relative;
 
     display: grid;
-    grid-template-columns: 1fr 1fr; /* CHANGED: was 1.1fr 0.9fr */
+    grid-template-columns: 1fr 0.9fr;
 
-    align-items: center;
+    align-items: start;
 
-    gap: 60px; /* CHANGED: was 100px to allow more room */
+    gap: 50px;
 }
 
 .hero-content {
@@ -666,46 +666,23 @@ ul {
    7. HERO VISUAL
 ========================================================= */
 
-/* =========================================================
-   7. HERO VISUAL
-========================================================= */
-
-/* =========================================================
-   FORCE HERO SIDE-BY-SIDE LAYOUT (ADD AT VERY BOTTOM OF CSS)
-========================================================= */
-
-.hero-layout {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    width: 100% !important;
-    gap: 40px !important;
-}
-
-.hero-content {
-    flex: 0 0 55% !important;
-    max-width: 55% !important;
-}
-
 .hero-visual {
-    flex: 0 0 40% !important;
-    max-width: 40% !important;
-    width: 100% !important;
-    margin-top: 0 !important;
-    display: flex !important;
-    justify-content: center !important;
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: 100%;
 }
 
 .profile-frame {
-    width: 100% !important;
-    max-width: 450px !important;
-    aspect-ratio: 1 / 1 !important;
-}
+    position: relative;
 
-.profile-image {
-    width: 85% !important;
-    height: 85% !important;
+    width: 100%;
+    max-width: 520px;
+
+    aspect-ratio: 1 / 1;
 }
 
 .profile-ring {
