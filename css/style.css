@@ -482,15 +482,17 @@ ul {
 }
 
 .hero-layout{
+    position:relative;
     display:grid;
     grid-template-columns:55% 45%;
-    align-items:center;
+    align-items:start;
     gap:90px;
 }
 
-.hero-content {
-    position: relative;
-    z-index: 2;
+.hero-content{
+    position:relative;
+    z-index:2;
+    padding-left:96px;   /* about 1 inch */
 }
 
 .eyebrow {
@@ -662,20 +664,21 @@ ul {
    7. HERO VISUAL
 ========================================================= */
 
-.hero-visual {
-    position: relative;
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-
-    width: 100%;
+.hero-visual{
+    position:relative;
+    display:flex;
+    justify-content:flex-end;   /* move to right */
+    align-items:flex-start;      /* move to top */
+    width:100%;
+    height:100%;
 }
 
 .profile-frame{
-    position:relative;
-    width:620px;
-    height:620px;
+    position:absolute;
+    top:30px;
+    right:20px;
+    width:480px;
+    height:480px;
 }
 
 .profile-ring {
