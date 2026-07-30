@@ -138,9 +138,9 @@ ul {
    4. GLOBAL UTILITIES
 ========================================================= */
 
-.container {
-    width: min(var(--container), calc(100% - 48px));
-    margin-inline: auto;
+.container{
+    width:min(1400px, calc(100% - 96px));
+    margin:auto;
 }
 
 .section {
@@ -679,8 +679,7 @@ ul {
 }
 
 .profile-ring {
-    position: absolute;
-    inset: 3%;
+    inset: 0;
 
     border-radius: 50%;
 
@@ -693,25 +692,20 @@ ul {
     animation: ringPulse 5s ease-in-out infinite;
 }
 
-.profile-image {
-    position: absolute;
+.profile-image{
+    position:absolute;
+    inset:6%;
 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width:88%;
+    height:88%;
 
-    width: 88%;
-    height: 88%;
+    border-radius:50%;
+    object-fit:cover;
+    object-position:center;
 
-    object-fit: cover;
-    object-position: center;
+    border:8px solid #081422;
 
-    border-radius: 50%;
-    border: 8px solid rgba(8, 20, 34, 0.96);
-
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
-
-    z-index: 2;
+    box-shadow:0 25px 70px rgba(0,0,0,.35);
 }
 
 .profile-status {
