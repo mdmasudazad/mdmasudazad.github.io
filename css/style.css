@@ -680,11 +680,8 @@ ul {
 
 
 .profile-frame{
-    width:420px;
-    height:420px;
-    border-radius:50%;
-    overflow:hidden;
-    position:relative;
+    width:410px;
+    height:410px;
 }
 
 .profile-image{
