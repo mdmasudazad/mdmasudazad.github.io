@@ -482,11 +482,10 @@ ul {
 }
 
 .hero-layout{
-    position:relative;
     display:grid;
-    grid-template-columns:55% 45%;
+    grid-template-columns: 1.3fr 0.8fr 0.7fr;
+    gap:40px;
     align-items:start;
-    gap:90px;
 }
 
 .hero-content{
@@ -2145,14 +2144,12 @@ ul {
         padding-top: 130px;
     }
 
-    .hero-layout{
+   .hero-layout{
        display:grid;
-       grid-template-columns:58% 42%;
-       gap:100px;
-       align-items:center;
-       gap:80px;
-       min-height:80vh;
-    }
+       grid-template-columns: 1.3fr 0.8fr 0.7fr;
+       gap:40px;
+       align-items:start;
+   }
 
     .hero-content {
         max-width: 850px;
