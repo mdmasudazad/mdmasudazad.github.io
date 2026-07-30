@@ -2147,7 +2147,8 @@ ul {
 
     .hero-layout{
        display:grid;
-       grid-template-columns: 1.15fr 0.85fr;
+       grid-template-columns:58% 42%;
+       gap:100px;
        align-items:center;
        gap:80px;
        min-height:80vh;
