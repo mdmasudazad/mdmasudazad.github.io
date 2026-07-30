@@ -807,12 +807,12 @@ ul {
     display:grid;
     grid-template-columns:repeat(4,1fr);
     width:100%;
-    gap:0;
+    max-width:900px;
     border:1px solid rgba(255,255,255,.08);
 }
 
 .metric-card{
-    padding:34px 28px;
+    padding:30px 24px;
     border-right:1px solid rgba(255,255,255,.08);
 }
 
