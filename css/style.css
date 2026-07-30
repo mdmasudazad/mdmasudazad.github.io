@@ -672,13 +672,10 @@ ul {
     width: 100%;
 }
 
-.profile-frame {
-    position: relative;
-
-    width: 100%;
-    max-width: 520px;
-
-    aspect-ratio: 1 / 1;
+.profile-frame{
+    position:relative;
+    width:620px;
+    height:620px;
 }
 
 .profile-ring {
