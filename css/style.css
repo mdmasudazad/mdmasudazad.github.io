@@ -677,8 +677,11 @@ ul {
 
 
 .profile-frame{
-    width:410px;
-    height:410px;
+    width:380px;
+    height:380px;
+    border-radius:50%;
+    overflow:hidden;
+    position:relative;
 }
 
 .profile-image{
