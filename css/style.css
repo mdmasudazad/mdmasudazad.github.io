@@ -483,11 +483,16 @@ ul {
 
 .hero-layout{
     display:grid;
-    grid-template-columns: 1.3fr 0.8fr 0.7fr;
-    gap:40px;
+    grid-template-columns:1.25fr .9fr;
     align-items:start;
+    gap:70px;
 }
-
+.hero-right{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:45px;
+}
 .hero-content{
     position:relative;
     z-index:2;
@@ -806,16 +811,19 @@ ul {
 
 .metrics-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:20px;
+    grid-template-columns:repeat(4,1fr);
     width:100%;
-    max-width:500px;
+    gap:0;
+    border:1px solid rgba(255,255,255,.08);
 }
 
 .metric-card{
-    padding:20px;
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:18px;
+    padding:34px 28px;
+    border-right:1px solid rgba(255,255,255,.08);
+}
+
+.metric-card:last-child{
+    border-right:none;
 }
 
 .metric-number{
@@ -2159,9 +2167,10 @@ ul {
         min-height: 450px;
     }
 
-    .profile-frame {
-        width: min(420px, 80vw);
-    }
+   .profile-frame{
+       width:410px;
+       height:410px;
+   }
 
     .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
