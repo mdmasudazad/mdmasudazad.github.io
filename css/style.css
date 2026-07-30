@@ -481,15 +481,11 @@ ul {
     background: var(--cyan);
 }
 
-.hero-layout {
-    position: relative;
-
-    display: grid;
-    grid-template-columns: 1fr 0.9fr;
-
-    align-items: start;
-
-    gap: 50px;
+.hero-layout{
+    display:grid;
+    grid-template-columns:55% 45%;
+    align-items:center;
+    gap:90px;
 }
 
 .hero-content {
