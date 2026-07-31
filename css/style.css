@@ -679,7 +679,7 @@ ul {
 .profile-frame{
     width:380px;
     height:380px;
-    border-radius:20%;
+    border-radius:100%;
     overflow:hidden;
     position:relative;
 }
