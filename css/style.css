@@ -188,7 +188,7 @@ ul {
     color: var(--accent-light);
 
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 26px; /* Increase this value as needed (e.g., 24px, 28px, 1.5rem) */
     font-weight: 700;
 
     letter-spacing: 0.14em;
