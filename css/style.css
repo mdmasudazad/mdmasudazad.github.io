@@ -1100,17 +1100,32 @@ ul {
     text-align:center;
 }
 
-.vision-title{
+.vision-heading{
 
-    max-width:980px;
+    margin-bottom:30px;
 
-    margin:25px auto;
+    color:white;
 
-    font-size:4rem;
+    font-size:3rem;
 
-    line-height:1.18;
+    font-weight:700;
+
+    text-align:center;
 }
+.vision-statement{
 
+    max-width:950px;
+
+    margin:0 auto 30px;
+
+    color:white;
+
+    font-size:1.45rem;
+
+    line-height:1.9;
+
+    font-weight:500;
+}
 .vision-text{
 
     max-width:900px;
