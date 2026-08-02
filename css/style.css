@@ -951,95 +951,178 @@ ul {
 }
 
 
-/* =========================================================
-   10. RESEARCH CARDS
-========================================================= */
+/*=========================
+    RESEARCH SECTION
+==========================*/
 
-.research-grid {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 16px;
+.section-heading{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:80px;
+    margin-bottom:70px;
 }
 
-.research-card {
-    position: relative;
-
-    min-height: 260px;
-
-    padding: 28px;
-
-    overflow: hidden;
-
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-
-    background: var(--surface);
-
-    transition:
-        transform var(--transition),
-        border-color var(--transition),
-        background var(--transition);
+.section-heading > div{
+    max-width:700px;
 }
 
-.research-card::after {
-    content: "";
-
-    position: absolute;
-
-    width: 120px;
-    height: 120px;
-
-    top: -55px;
-    right: -55px;
-
-    border-radius: 50%;
-
-    background: rgba(90, 168, 255, 0.08);
-
-    filter: blur(5px);
-}
-
-.research-card:hover {
-    transform: translateY(-6px);
-
-    border-color: rgba(141, 197, 255, 0.24);
-
-    background: var(--surface-2);
-}
-
-.card-number {
-    display: block;
-
-    margin-bottom: 50px;
-
-    color: var(--accent);
-
-    font-family: var(--font-display);
-    font-size: 12px;
-    font-weight: 700;
-
-    letter-spacing: 0.1em;
-}
-
-.research-card h3 {
-    margin-bottom: 12px;
-
-    color: white;
-
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-}
-
-.research-card p {
-    color: var(--muted);
-
-    font-size: 13px;
-    line-height: 1.75;
+.section-heading > p{
+    max-width:380px;
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.8;
 }
 
 
+/*=========================
+      RESEARCH GRID
+==========================*/
+
+.research-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+}
+
+
+/*=========================
+      RESEARCH CARD
+==========================*/
+
+.research-card{
+
+    position:relative;
+
+    min-height:270px;
+
+    padding:42px 36px;
+
+    overflow:hidden;
+
+    background:var(--surface);
+
+    border:1px solid var(--line);
+    border-radius:24px;
+
+    transition:.35s ease;
+}
+
+.research-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:140px;
+    height:140px;
+
+    top:-70px;
+    right:-70px;
+
+    border-radius:50%;
+
+    background:rgba(110,180,255,.06);
+
+    filter:blur(8px);
+}
+
+.research-card:hover{
+
+    transform:translateY(-8px);
+
+    background:var(--surface-2);
+
+    border-color:rgba(110,180,255,.22);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.28);
+}
+
+
+/*=========================
+      CARD NUMBER
+==========================*/
+
+.card-number{
+
+    display:block;
+
+    margin-bottom:62px;
+
+    color:var(--accent);
+
+    font-size:13px;
+    font-weight:700;
+
+    letter-spacing:.18em;
+
+    text-transform:uppercase;
+}
+
+
+/*=========================
+      CARD TITLE
+==========================*/
+
+.research-card h3{
+
+    margin-bottom:18px;
+
+    color:#ffffff;
+
+    font-size:1.55rem;
+
+    font-weight:700;
+
+    line-height:1.3;
+}
+
+
+/*=========================
+      CARD TEXT
+==========================*/
+
+.research-card p{
+
+    color:var(--muted);
+
+    font-size:15px;
+
+    line-height:1.9;
+}
+
+.vision-block{
+
+    max-width:1100px;
+
+    margin:0 auto 120px;
+
+    text-align:center;
+}
+
+.vision-title{
+
+    max-width:980px;
+
+    margin:25px auto;
+
+    font-size:4rem;
+
+    line-height:1.18;
+}
+
+.vision-text{
+
+    max-width:900px;
+
+    margin:0 auto;
+
+    color:var(--muted);
+
+    font-size:1.15rem;
+
+    line-height:1.9;
+}
 /* =========================================================
    11. FEATURED PROJECT
 ========================================================= */
