@@ -1,1 +1,897 @@
+/* ==========================================================
+   HYBRID FEM-ML STIFFNESS PREDICTOR
+   CALCULATOR PAGE
+========================================================== */
 
+
+/*==============================
+        PAGE LAYOUT
+===============================*/
+
+.calculator-hero{
+
+    padding-top:160px;
+    padding-bottom:70px;
+
+    text-align:center;
+
+    background:
+    radial-gradient(circle at top,
+    rgba(90,168,255,.14),
+    transparent 45%);
+
+}
+
+.calculator-hero h1{
+
+    margin-top:18px;
+
+    font-size:3.8rem;
+
+    line-height:1.08;
+
+    font-family:var(--font-display);
+
+    color:white;
+
+}
+
+.hero-label{
+
+    color:var(--accent);
+
+    letter-spacing:.28em;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+.hero-subtitle{
+
+    max-width:850px;
+
+    margin:28px auto 0;
+
+    color:var(--muted);
+
+    font-size:18px;
+
+    line-height:1.9;
+
+}
+
+
+
+/*==============================
+      MAIN GRID
+===============================*/
+
+.predictor-section{
+
+    padding-bottom:120px;
+
+}
+
+.predictor-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 430px;
+
+    gap:45px;
+
+    align-items:start;
+
+}
+
+
+
+/*==============================
+        CARDS
+===============================*/
+
+.input-card,
+.result-card{
+
+    background:linear-gradient(
+    145deg,
+    rgba(18,34,53,.96),
+    rgba(10,20,35,.98));
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:26px;
+
+    padding:42px;
+
+    box-shadow:
+    0 18px 60px rgba(0,0,0,.32);
+
+}
+
+
+
+/*==============================
+        CARD HEADER
+===============================*/
+
+.card-tag{
+
+    color:var(--accent);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.22em;
+
+    margin-bottom:18px;
+
+}
+
+.card-header h2{
+
+    color:white;
+
+    font-size:2rem;
+
+    line-height:1.2;
+
+    margin-bottom:40px;
+
+}
+
+
+
+/*==============================
+      FORM LAYOUT
+===============================*/
+
+#predictionForm{
+
+    display:grid;
+
+    gap:22px;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    color:var(--text-soft);
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+
+
+/*==============================
+      INPUT BOXES
+===============================*/
+
+.form-group input{
+
+    width:100%;
+
+    height:58px;
+
+    padding:0 18px;
+
+    border-radius:14px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:#081320;
+
+    color:white;
+
+    font-size:15px;
+
+    transition:.30s;
+
+}
+
+.form-group input::placeholder{
+
+    color:#6d839d;
+
+}
+
+.form-group input:hover{
+
+    border-color:rgba(90,168,255,.28);
+
+}
+
+.form-group input:focus{
+
+    outline:none;
+
+    border-color:var(--accent);
+
+    box-shadow:
+    0 0 0 4px rgba(90,168,255,.14);
+
+}
+
+
+
+/*==============================
+      PREDICT BUTTON
+===============================*/
+
+.predict-button{
+
+    margin-top:18px;
+
+    height:62px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    background:linear-gradient(
+    135deg,
+    #4ca5ff,
+    #69d6ff);
+
+    color:#06101d;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    letter-spacing:.02em;
+
+    transition:.30s;
+
+}
+
+.predict-button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 18px 45px rgba(90,168,255,.34);
+
+}
+
+.predict-button:active{
+
+    transform:scale(.98);
+
+}
+/*=========================================================
+        RESULT PANEL
+=========================================================*/
+
+.result-card{
+
+    position:sticky;
+
+    top:120px;
+
+}
+
+.result-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:35px;
+
+    font-weight:600;
+
+    color:white;
+
+    font-size:15px;
+
+}
+
+.status-dot{
+
+    width:12px;
+
+    height:12px;
+
+    border-radius:50%;
+
+    background:#29d67a;
+
+    box-shadow:
+    0 0 18px rgba(41,214,122,.8);
+
+}
+
+
+
+/*=========================================================
+        PREDICTION BOX
+=========================================================*/
+
+.prediction-box{
+
+    background:linear-gradient(
+        145deg,
+        rgba(15,30,48,.95),
+        rgba(7,16,28,.98));
+
+    border:1px solid rgba(90,168,255,.15);
+
+    border-radius:20px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+.prediction-label{
+
+    color:#9fb6cc;
+
+    font-size:14px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.15em;
+
+    margin-bottom:20px;
+
+}
+
+#predictionValue{
+
+    font-size:3.4rem;
+
+    font-weight:800;
+
+    color:#63c8ff;
+
+    line-height:1;
+
+    margin-bottom:15px;
+
+    text-shadow:
+        0 0 20px rgba(90,168,255,.35);
+
+}
+
+.prediction-unit{
+
+    display:block;
+
+    color:#7f98b4;
+
+    font-size:15px;
+
+}
+
+
+
+/*=========================================================
+        MODEL INFORMATION
+=========================================================*/
+
+.model-information{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+    margin-bottom:35px;
+
+}
+
+.info-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 20px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,255,255,.05);
+
+    transition:.3s;
+
+}
+
+.info-row:hover{
+
+    transform:translateY(-2px);
+
+    border-color:rgba(90,168,255,.20);
+
+    background:rgba(90,168,255,.05);
+
+}
+
+.info-row span{
+
+    color:#9bb0c7;
+
+    font-size:14px;
+
+}
+
+.info-row strong{
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+
+
+/*=========================================================
+        DETAILS BUTTON
+=========================================================*/
+
+.details-button{
+
+    width:100%;
+
+    height:56px;
+
+    border-radius:14px;
+
+    border:1px solid rgba(90,168,255,.18);
+
+    background:transparent;
+
+    color:#69c8ff;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.details-button:hover{
+
+    background:rgba(90,168,255,.10);
+
+    border-color:#69c8ff;
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/*=========================================================
+        DETAILS SECTION
+=========================================================*/
+
+.details-section{
+
+    padding:90px 0 120px;
+
+}
+
+.details-section h2{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:2.3rem;
+
+    margin-bottom:15px;
+
+}
+
+.details-section p{
+
+    text-align:center;
+
+    color:#8ea7c3;
+
+    max-width:700px;
+
+    margin:0 auto 60px;
+
+}
+
+.details-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:30px;
+
+}
+
+.detail-box{
+
+    min-height:260px;
+
+    border-radius:20px;
+
+    border:1px dashed rgba(90,168,255,.18);
+
+    background:rgba(255,255,255,.02);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#6faeff;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+.detail-box:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#63c8ff;
+
+    background:rgba(90,168,255,.05);
+
+}
+/*=========================================================
+                    SECTION 3
+            ANIMATIONS & UTILITIES
+=========================================================*/
+
+/* ---------- Fade Animation ---------- */
+
+@keyframes fadeUp {
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.input-card,
+.result-card,
+.detail-box{
+
+    animation:fadeUp .8s ease forwards;
+
+}
+
+
+/* ---------- Prediction Number ---------- */
+
+@keyframes glowPulse{
+
+    0%{
+
+        text-shadow:0 0 8px rgba(99,200,255,.25);
+
+    }
+
+    50%{
+
+        text-shadow:
+        0 0 18px rgba(99,200,255,.7),
+        0 0 35px rgba(99,200,255,.45);
+
+    }
+
+    100%{
+
+        text-shadow:0 0 8px rgba(99,200,255,.25);
+
+    }
+
+}
+
+#predictionValue{
+
+    animation:glowPulse 2.5s infinite;
+
+}
+
+
+/* ---------- Loading State ---------- */
+
+.predict-button.loading{
+
+    pointer-events:none;
+
+    opacity:.75;
+
+}
+
+.predict-button.loading::after{
+
+    content:"";
+
+    width:18px;
+
+    height:18px;
+
+    border:2px solid rgba(255,255,255,.35);
+
+    border-top:2px solid white;
+
+    border-radius:50%;
+
+    display:inline-block;
+
+    margin-left:12px;
+
+    animation:spin .8s linear infinite;
+
+}
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+
+/* ---------- Details Animation ---------- */
+
+.details-section{
+
+    max-height:0;
+
+    overflow:hidden;
+
+    opacity:0;
+
+    transition:
+
+        max-height .6s ease,
+
+        opacity .5s ease,
+
+        padding .4s ease;
+
+}
+
+.details-section.active{
+
+    max-height:2500px;
+
+    opacity:1;
+
+}
+
+
+/* ---------- Card Hover ---------- */
+
+.input-card:hover,
+.result-card:hover{
+
+    transform:translateY(-4px);
+
+    transition:.35s;
+
+}
+
+
+/* ---------- Scrollbar ---------- */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#07111b;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#2f6ba3;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#59b6ff;
+
+}
+
+
+/* ---------- Selection ---------- */
+
+::selection{
+
+    background:#5aa8ff;
+
+    color:white;
+
+}
+/*=========================================================
+                    SECTION 4
+                RESPONSIVE DESIGN
+=========================================================*/
+
+
+@media(max-width:1200px){
+
+    .predictor-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .result-card{
+
+        position:relative;
+
+        top:0;
+
+    }
+
+}
+
+
+
+@media(max-width:900px){
+
+    .calculator-hero h1{
+
+        font-size:2.8rem;
+
+    }
+
+    .input-card,
+    .result-card{
+
+        padding:30px;
+
+    }
+
+    .details-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+
+@media(max-width:768px){
+
+    .calculator-hero{
+
+        padding-top:120px;
+
+    }
+
+    .calculator-hero h1{
+
+        font-size:2.3rem;
+
+    }
+
+    .hero-subtitle{
+
+        font-size:16px;
+
+    }
+
+    .card-header h2{
+
+        font-size:1.7rem;
+
+    }
+
+    #predictionValue{
+
+        font-size:2.6rem;
+
+    }
+
+}
+
+
+
+@media(max-width:576px){
+
+    .input-card,
+    .result-card{
+
+        padding:22px;
+
+        border-radius:18px;
+
+    }
+
+    .predict-button{
+
+        height:56px;
+
+        font-size:15px;
+
+    }
+
+    .details-button{
+
+        height:52px;
+
+    }
+
+    .form-group input{
+
+        height:52px;
+
+    }
+
+    .calculator-hero h1{
+
+        font-size:2rem;
+
+    }
+
+    .hero-subtitle{
+
+        line-height:1.7;
+
+    }
+
+}
