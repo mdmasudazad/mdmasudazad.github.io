@@ -3,7 +3,94 @@
    CALCULATOR PAGE
 ========================================================== */
 
+/*=========================================================
+                  TOP NAVIGATION BAR
+=========================================================*/
 
+/* 1. Header & Navigation Container */
+header, .navbar, nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 5%;
+    width: 100%;
+    position: absolute; /* or fixed if you want it sticky */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: rgba(7, 17, 27, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 2. Left Side Brand/Logo Styling */
+.nav-brand, .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.nav-brand .logo-tag {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--accent, #5aa8ff);
+}
+
+.nav-brand h2, .nav-brand .brand-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.nav-brand .sub-tag {
+    font-size: 11px;
+    color: #7f98b4;
+    letter-spacing: 0.05em;
+}
+
+/* 3. Right Side Navigation Links (Horizontal Alignment) */
+.nav-links, nav ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 4. Link Styles */
+.nav-links a, nav ul li a {
+    color: #9bb0c7;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-links a:hover, nav ul li a:hover {
+    color: #69c8ff;
+}
+
+/* 5. Highlight Button (e.g. View CV / CTA) */
+.nav-links .btn-cv, nav ul li a.btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(90, 168, 255, 0.3);
+    background: rgba(90, 168, 255, 0.1);
+    color: #69c8ff;
+}
+
+.nav-links .btn-cv:hover, nav ul li a.btn:hover {
+    background: #4ca5ff;
+    color: #06101d;
+}
 /*==============================
         PAGE LAYOUT
 ===============================*/
@@ -792,25 +879,17 @@
 
 @media(max-width:900px){
 
+    /* ADD THIS LINE INSIDE YOUR EXISTING 900px MEDIA QUERY */
+    .nav-links, nav ul {
+        gap: 1rem;
+        font-size: 13px;
+    }
+
     .calculator-hero h1{
-
         font-size:2.8rem;
-
     }
 
-    .input-card,
-    .result-card{
-
-        padding:30px;
-
-    }
-
-    .details-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
+    /* ... rest of your existing 900px code ... */
 }
 
 
