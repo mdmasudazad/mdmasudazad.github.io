@@ -40,26 +40,20 @@ function getInputs(){
 
     return{
 
-        outerDiameter:
-        Number(document.getElementById("outerDiameter").value),
+        length:
+        Number(document.getElementById("length").value),
 
-        tyreWidth:
-        Number(document.getElementById("tyreWidth").value),
+        height:
+        Number(document.getElementById("height").value),
 
-        rubberThickness:
-        Number(document.getElementById("rubberThickness").value),
+        Thickness:
+        Number(document.getElementById("Thickness").value),
 
-        steelThickness:
+        totaltyrestacks:
         Number(document.getElementById("steelThickness").value),
 
         shapeFactor:
         Number(document.getElementById("shapeFactor").value),
-
-        verticalLoad:
-        Number(document.getElementById("verticalLoad").value),
-
-        hardness:
-        Number(document.getElementById("hardness").value),
 
         aspectRatio:
         Number(document.getElementById("aspectRatio").value)
@@ -144,19 +138,15 @@ function fakePrediction(data){
 
     return (
 
-        data.outerDiameter*0.80 +
+        data.length*0.80 +
 
-        data.tyreWidth*1.15 +
+        data.height*1.15 +
 
-        data.rubberThickness*5.4 +
+        data.Thickness*5.4 +
 
-        data.steelThickness*9.5 +
+        data.totaltyrestacks*9.5 +
 
         data.shapeFactor*55 +
-
-        data.verticalLoad*1.75 +
-
-        data.hardness*3.5 +
 
         data.aspectRatio*120
 
