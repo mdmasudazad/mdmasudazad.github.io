@@ -10,7 +10,7 @@
    "Thickness of rubber\ntr (mm)"
    ========================================================== */
 
-const MODEL_PATH = "models/final/horizontal_stiffness/horizontal_stiffness_catboost.onnx";
+const MODEL_PATH = "models/horizontal_stiffness_catboost.onnx";
 
 const predictButton = document.getElementById("predictBtn");
 const predictionValue = document.getElementById("predictionValue");
