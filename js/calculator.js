@@ -1,43 +1,321 @@
 /* ==========================================================
-   Hybrid FEM-ML Horizontal Stiffness Predictor
+   HYBRID FEM–ML HORIZONTAL STIFFNESS PREDICTOR
    FINAL WEB DEPLOYMENT
-   Model: Direct CatBoost
-   Inputs: 8
-   Output: Horizontal Stiffness (N/mm)
 
-   IMPORTANT:
-   Rubber Thickness =
-   "Thickness of rubber\ntr (mm)"
+   Model:
+   Direct CatBoost → ONNX
+
+   Inputs:
+   8 original features
+
+   Output:
+   Horizontal Stiffness (N/mm)
+
    ========================================================== */
 
-const MODEL_PATH = "models/horizontal_stiffness_catboost.onnx";
 
-const predictButton = document.getElementById("predictBtn");
-const predictionValue = document.getElementById("predictionValue");
+/* ==========================================================
+   MODEL PATH
+   ========================================================== */
 
-const detailsButton = document.getElementById("toggleDetails");
-const detailsSection = document.getElementById("detailsSection");
+const MODEL_PATH =
+    "models/horizontal_stiffness_catboost.onnx";
+
+
+/* ==========================================================
+   DOM ELEMENTS
+   ========================================================== */
+
+const predictButton =
+    document.getElementById("predictBtn");
+
+const predictionValue =
+    document.getElementById("predictionValue");
+
+const detailsButton =
+    document.getElementById("toggleDetails");
+
+const detailsSection =
+    document.getElementById("detailsSection");
+
+
+/* ==========================================================
+   GLOBAL MODEL SESSION
+   ========================================================== */
 
 let ortSession = null;
+
+
+/* ==========================================================
+   DIAGNOSTIC GRAPH CONFIGURATION
+   ==========================================================
+
+   IMPORTANT:
+
+   Upload your PNG files to the "models" folder in GitHub.
+
+   Expected files:
+
+   models/feature_importance.png
+   models/actual_vs_predicted.png
+   models/error_distribution.png
+   models/residual_vs_predicted.png
+   models/cross_validation_r2.png
+   models/cross_validation_rmse.png
+   models/model_statistics.png
+
+   ========================================================== */
+
+const DIAGNOSTIC_GRAPHS = [
+
+    {
+        title: "Feature Importance",
+        file: "models/feature_importance.png",
+        description:
+            "Relative contribution of the eight input parameters to the CatBoost model."
+    },
+
+    {
+        title: "Prediction vs Actual",
+        file: "models/actual_vs_predicted.png",
+        description:
+            "Comparison between the finite-element stiffness values and the model predictions."
+    },
+
+    {
+        title: "Error Distribution",
+        file: "models/error_distribution.png",
+        description:
+            "Distribution of prediction errors obtained from the out-of-fold predictions."
+    },
+
+    {
+        title: "Residual Distribution",
+        file: "models/residual_vs_predicted.png",
+        description:
+            "Residuals plotted against predicted horizontal stiffness."
+    },
+
+    {
+        title: "Cross-Validation R²",
+        file: "models/cross_validation_r2.png",
+        description:
+            "R² obtained for each fold of the 15-fold cross-validation."
+    },
+
+    {
+        title: "Cross-Validation RMSE",
+        file: "models/cross_validation_rmse.png",
+        description:
+            "RMSE obtained for each fold of the 15-fold cross-validation."
+    },
+
+    {
+        title: "Model Statistics",
+        file: "models/model_statistics.png",
+        description:
+            "Summary of the final CatBoost model and its validation performance."
+    }
+
+];
+
+
+/* ==========================================================
+   DETAILS GRAPH RENDERER
+   ========================================================== */
+
+function renderDiagnosticGraphs() {
+
+    const detailBoxes =
+        document.querySelectorAll(
+            ".detail-box"
+        );
+
+    if (!detailBoxes.length) {
+        console.warn(
+            "No .detail-box elements found."
+        );
+
+        return;
+    }
+
+
+    detailBoxes.forEach(
+        (box, index) => {
+
+            const graph =
+                DIAGNOSTIC_GRAPHS[index];
+
+            if (!graph) {
+                return;
+            }
+
+
+            /* Clear existing content */
+
+            box.innerHTML = "";
+
+
+            /* Create graph title */
+
+            const title =
+                document.createElement(
+                    "h3"
+                );
+
+            title.textContent =
+                graph.title;
+
+
+            /* Create image */
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.src =
+                graph.file;
+
+            image.alt =
+                graph.title;
+
+
+            /*
+               Make graph responsive.
+               CSS can override this later.
+            */
+
+            image.style.width =
+                "100%";
+
+            image.style.height =
+                "auto";
+
+            image.style.display =
+                "block";
+
+
+            /*
+               Error handling if image
+               has not yet been uploaded.
+            */
+
+            image.onerror = function () {
+
+                box.innerHTML = "";
+
+
+                const missingTitle =
+                    document.createElement(
+                        "h3"
+                    );
+
+                missingTitle.textContent =
+                    graph.title;
+
+
+                const message =
+                    document.createElement(
+                        "p"
+                    );
+
+                message.textContent =
+                    "Graph not available yet. Upload: " +
+                    graph.file;
+
+
+                message.style.opacity =
+                    "0.65";
+
+
+                box.appendChild(
+                    missingTitle
+                );
+
+                box.appendChild(
+                    message
+                );
+
+            };
+
+
+            /* Create description */
+
+            const description =
+                document.createElement(
+                    "p"
+                );
+
+            description.textContent =
+                graph.description;
+
+
+            /*
+               Assemble box
+            */
+
+            box.appendChild(
+                title
+            );
+
+            box.appendChild(
+                image
+            );
+
+            box.appendChild(
+                description
+            );
+
+        }
+    );
+
+}
 
 
 /* ==========================================================
    DETAILS TOGGLE
    ========================================================== */
 
-if (detailsButton && detailsSection) {
+if (
+    detailsButton &&
+    detailsSection
+) {
 
-    detailsButton.addEventListener("click", () => {
+    detailsButton.addEventListener(
+        "click",
+        () => {
 
-        detailsSection.classList.toggle("active");
+            const isActive =
+                detailsSection.classList.toggle(
+                    "active"
+                );
 
-        if (detailsSection.classList.contains("active")) {
-            detailsButton.innerHTML = "Hide Details ▲";
-        } else {
-            detailsButton.innerHTML = "Show Details ▼";
+
+            if (isActive) {
+
+                detailsButton.innerHTML =
+                    "Hide Details ▲";
+
+
+                /*
+                   Render graphs only when
+                   details are opened.
+                */
+
+                renderDiagnosticGraphs();
+
+            }
+
+            else {
+
+                detailsButton.innerHTML =
+                    "Show Details ▼";
+
+            }
+
         }
-
-    });
+    );
 
 }
 
@@ -50,21 +328,32 @@ async function loadModel() {
 
     try {
 
-        console.log("Loading CatBoost ONNX model...");
-
-        ortSession = await ort.InferenceSession.create(
-            MODEL_PATH,
-            {
-                executionProviders: ["wasm"]
-            }
+        console.log(
+            "Loading CatBoost ONNX model..."
         );
 
-        console.log("CatBoost ONNX model loaded.");
+
+        ortSession =
+            await ort.InferenceSession.create(
+                MODEL_PATH,
+                {
+                    executionProviders: [
+                        "wasm"
+                    ]
+                }
+            );
+
+
+        console.log(
+            "CatBoost ONNX model loaded successfully."
+        );
+
 
         console.log(
             "Input names:",
             ortSession.inputNames
         );
+
 
         console.log(
             "Output names:",
@@ -73,22 +362,35 @@ async function loadModel() {
 
     }
 
-      catch (error) {
-   
-       console.error("FAILED TO LOAD MODEL");
-       console.error(error);
-       console.error("MODEL PATH:", MODEL_PATH);
-   
-       alert(
-           "Model loading failed. Open F12 → Console and check the exact error."
-       );
-      }
+
+    catch (error) {
+
+        console.error(
+            "FAILED TO LOAD MODEL"
+        );
+
+        console.error(
+            error
+        );
+
+        console.error(
+            "MODEL PATH:",
+            MODEL_PATH
+        );
+
+
+        alert(
+            "Model loading failed. " +
+            "Open F12 → Console and check the exact error."
+        );
+
+    }
 
 }
 
 
 /* ==========================================================
-   GET INPUTS
+   GET INPUT VALUES
    ========================================================== */
 
 function getInputs() {
@@ -149,25 +451,33 @@ function getInputs() {
 
 
 /* ==========================================================
-   VALIDATION
+   INPUT VALIDATION
    ========================================================== */
 
 function validateInputs(values) {
 
-    for (const value of values) {
+    /* Check all values */
 
-        if (!Number.isFinite(value)) {
+    for (
+        const value of values
+    ) {
+
+        if (
+            !Number.isFinite(value)
+        ) {
 
             alert(
                 "Please fill all 8 input parameters."
             );
 
             return false;
+
         }
 
     }
 
-    /* Bonding condition must be 0 or 1 */
+
+    /* Bonding condition */
 
     if (
         values[0] !== 0 &&
@@ -179,12 +489,14 @@ function validateInputs(values) {
         );
 
         return false;
+
     }
 
 
-    /* Physical dimensions must be positive */
+    /* Positive parameters */
 
     const positiveInputs = [
+
         values[1], // Length
         values[2], // Height
         values[3], // Rubber thickness
@@ -192,20 +504,29 @@ function validateInputs(values) {
         values[5], // Tire stacks
         values[6], // Shape factor
         values[7]  // Aspect ratio
+
     ];
 
-    for (const value of positiveInputs) {
 
-        if (value <= 0) {
+    for (
+        const value of positiveInputs
+    ) {
+
+        if (
+            value <= 0
+        ) {
 
             alert(
-                "All dimensional and geometric parameters must be greater than zero."
+                "All dimensional and geometric parameters " +
+                "must be greater than zero."
             );
 
             return false;
+
         }
 
     }
+
 
     return true;
 
@@ -213,41 +534,69 @@ function validateInputs(values) {
 
 
 /* ==========================================================
-   ANIMATE RESULT
+   ANIMATE PREDICTION
    ========================================================== */
 
-function animatePrediction(target) {
+function animatePrediction(
+    target
+) {
 
-    const duration = 800;
+    const duration =
+        800;
 
-    const startValue = 0;
+    const startValue =
+        0;
 
-    const startTime = performance.now();
+    const startTime =
+        performance.now();
 
-    function update(currentTime) {
+
+    function update(
+        currentTime
+    ) {
 
         const elapsed =
-            currentTime - startTime;
+            currentTime -
+            startTime;
+
 
         const progress =
-            Math.min(elapsed / duration, 1);
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
 
         const value =
             startValue +
-            (target - startValue) * progress;
+            (
+                target -
+                startValue
+            ) *
+            progress;
+
 
         predictionValue.textContent =
-            value.toFixed(2) + " N/mm";
+            value.toFixed(2) +
+            " N/mm";
 
-        if (progress < 1) {
 
-            requestAnimationFrame(update);
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                update
+            );
 
         }
 
     }
 
-    requestAnimationFrame(update);
+
+    requestAnimationFrame(
+        update
+    );
 
 }
 
@@ -256,7 +605,9 @@ function animatePrediction(target) {
    RUN CATBOOST PREDICTION
    ========================================================== */
 
-async function predictStiffness(values) {
+async function predictStiffness(
+    values
+) {
 
     if (!ortSession) {
 
@@ -266,9 +617,9 @@ async function predictStiffness(values) {
 
     }
 
+
     /*
-       CatBoost was trained with exactly 8 features
-       in this order:
+       EXACT CATBOOST FEATURE ORDER
 
        1. Bonding Condition
        2. Length
@@ -280,7 +631,12 @@ async function predictStiffness(values) {
        8. Aspect Ratio
     */
 
-    const inputData = new Float32Array(values);
+
+    const inputData =
+        new Float32Array(
+            values
+        );
+
 
     const inputTensor =
         new ort.Tensor(
@@ -289,33 +645,50 @@ async function predictStiffness(values) {
             [1, 8]
         );
 
+
     const inputName =
         ortSession.inputNames[0];
+
 
     const outputName =
         ortSession.outputNames[0];
 
+
     const feeds = {};
+
 
     feeds[inputName] =
         inputTensor;
 
+
     const results =
-        await ortSession.run(feeds);
+        await ortSession.run(
+            feeds
+        );
+
 
     const output =
         results[outputName];
 
-    const prediction =
-        Number(output.data[0]);
 
-    if (!Number.isFinite(prediction)) {
+    const prediction =
+        Number(
+            output.data[0]
+        );
+
+
+    if (
+        !Number.isFinite(
+            prediction
+        )
+    ) {
 
         throw new Error(
             "Model returned an invalid prediction."
         );
 
     }
+
 
     return prediction;
 
@@ -326,77 +699,116 @@ async function predictStiffness(values) {
    PREDICT BUTTON
    ========================================================== */
 
-predictButton.addEventListener(
-    "click",
-    async () => {
+if (predictButton) {
 
-        const values =
-            getInputs();
+    predictButton.addEventListener(
+        "click",
+        async () => {
 
-        if (!validateInputs(values)) {
-            return;
-        }
 
-        predictButton.disabled = true;
+            /* Get inputs */
 
-        predictButton.classList.add(
-            "loading"
-        );
+            const values =
+                getInputs();
 
-        predictButton.innerHTML =
-            "Running CatBoost Model...";
 
-        try {
+            /* Validate */
 
-            const result =
-                await predictStiffness(
+            if (
+                !validateInputs(
                     values
-                );
+                )
+            ) {
 
-            animatePrediction(
-                result
-            );
+                return;
 
-            console.log(
-                "Horizontal stiffness:",
-                result,
-                "N/mm"
-            );
+            }
 
-        }
 
-        catch (error) {
-
-            console.error(
-                "Prediction error:",
-                error
-            );
-
-            alert(
-                "Prediction failed. Check that the ONNX model is available."
-            );
-
-            predictionValue.textContent =
-                "-- N/mm";
-
-        }
-
-        finally {
+            /* Disable button */
 
             predictButton.disabled =
-                false;
+                true;
 
-            predictButton.classList.remove(
+
+            predictButton.classList.add(
                 "loading"
             );
 
+
             predictButton.innerHTML =
-                "Predict Horizontal Stiffness";
+                "Running CatBoost Model...";
+
+
+            try {
+
+
+                /* Run prediction */
+
+                const result =
+                    await predictStiffness(
+                        values
+                    );
+
+
+                /* Animate */
+
+                animatePrediction(
+                    result
+                );
+
+
+                /* Console output */
+
+                console.log(
+                    "Horizontal stiffness:",
+                    result,
+                    "N/mm"
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Prediction error:",
+                    error
+                );
+
+
+                alert(
+                    "Prediction failed. " +
+                    "Check that the ONNX model is available."
+                );
+
+
+                predictionValue.textContent =
+                    "-- N/mm";
+
+            }
+
+
+            finally {
+
+                predictButton.disabled =
+                    false;
+
+
+                predictButton.classList.remove(
+                    "loading"
+                );
+
+
+                predictButton.innerHTML =
+                    "Predict Horizontal Stiffness";
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 /* ==========================================================
