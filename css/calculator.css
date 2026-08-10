@@ -610,7 +610,18 @@ header, .navbar, nav {
 
 .details-section{
 
-    padding:90px 0 120px;
+    max-height:0;
+
+    overflow:hidden;
+
+    opacity:0;
+
+    padding:0;
+
+    transition:
+        max-height .6s ease,
+        opacity .5s ease,
+        padding .4s ease;
 
 }
 
@@ -648,27 +659,80 @@ header, .navbar, nav {
 
 }
 
-.detail-box{
+.detail-box {
 
-    min-height:260px;
+    min-height: 260px;
 
-    border-radius:20px;
+    border-radius: 20px;
 
-    border:1px dashed rgba(90,168,255,.18);
+    border: 1px solid rgba(90,168,255,.18);
 
-    background:rgba(255,255,255,.02);
+    background: rgba(255,255,255,.02);
 
-    display:flex;
+    padding: 25px;
 
-    justify-content:center;
+    color: #6faeff;
 
-    align-items:center;
+    font-size: 18px;
 
-    color:#6faeff;
+    transition: .3s;
 
-    font-size:18px;
+    display: flex;
 
-    transition:.3s;
+    flex-direction: column;
+
+    justify-content: flex-start;
+
+    align-items: stretch;
+
+    overflow: hidden;
+
+}
+.detail-box h3 {
+
+    color: white;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    margin: 0 0 20px 0;
+
+}
+
+
+.detail-box img {
+
+    width: 100%;
+
+    height: auto;
+
+    max-height: 520px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin: 0 auto;
+
+    border-radius: 10px;
+
+}
+
+
+.detail-box p {
+
+    color: #8ea7c3;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    margin: 18px auto 0;
+
+    max-width: 90%;
 
 }
 
@@ -815,9 +879,11 @@ header, .navbar, nav {
 
 .details-section.active{
 
-    max-height:2500px;
+    max-height:10000px;
 
     opacity:1;
+
+    padding:90px 0 120px;
 
 }
 
