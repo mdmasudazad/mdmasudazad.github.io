@@ -73,18 +73,16 @@ async function loadModel() {
 
     }
 
-    catch (error) {
-
-        console.error(
-            "Failed to load ONNX model:",
-            error
-        );
-
-        alert(
-            "The stiffness prediction model could not be loaded."
-        );
-
-    }
+      catch (error) {
+   
+       console.error("FAILED TO LOAD MODEL");
+       console.error(error);
+       console.error("MODEL PATH:", MODEL_PATH);
+   
+       alert(
+           "Model loading failed. Open F12 → Console and check the exact error."
+       );
+      }
 
 }
 
