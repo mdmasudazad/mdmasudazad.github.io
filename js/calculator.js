@@ -39,7 +39,10 @@ detailsButton.addEventListener("click", () => {
 function getInputs(){
 
     return{
-
+       
+        bonding_condition:
+        Number(document.getElementById("bonding-condition").value),
+       
         length:
         Number(document.getElementById("length").value),
 
@@ -48,7 +51,10 @@ function getInputs(){
 
         Thickness:
         Number(document.getElementById("Thickness").value),
-
+       
+        eq_Thickness:
+        Number(document.getElementById("eq_Thickness").value),
+       
         totaltyrestacks:
         Number(document.getElementById("steelThickness").value),
 
