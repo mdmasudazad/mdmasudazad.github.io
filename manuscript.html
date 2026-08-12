@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictive Modeling of Horizontal Stiffness in Scrap Tire Isolators</title>
+<meta name="description" content="A hybrid FEM-ML approach to predicting the horizontal stiffness of scrap tire rubber pad (STRP) seismic isolators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ BACKGROUND GRID ============ -->
+<div class="blueprint-grid" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="28" height="28"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 24 Q14 12 20 24 T32 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <span class="brand-text">STRP&nbsp;/&nbsp;Kh</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Chapters">
+      <a href="#overview" data-nav>Overview</a>
+      <a href="#introduction" data-nav>01 · Intro</a>
+      <a href="#fe-modeling" data-nav>02 · FE Model</a>
+      <a href="#parametric" data-nav>03 · Parametric</a>
+      <a href="#ml-program" data-nav>04 · ML Program</a>
+      <a href="#results" data-nav>05 · Results</a>
+      <a href="#closing" data-nav>06 · Closing</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="repo-link" href="https://mdmasudazad.github.io/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.074.547-.174.547-.386 0-.19-.007-.693-.01-1.36-2.226.484-2.695-1.073-2.695-1.073-.364-.924-.89-1.17-.89-1.17-.727-.497.055-.487.055-.487.803.057 1.225.825 1.225.825.714 1.223 1.873.87 2.33.665.072-.517.279-.87.508-1.07-1.777-.202-3.644-.888-3.644-3.953 0-.873.312-1.587.823-2.147-.083-.202-.357-1.015.078-2.117 0 0 .672-.215 2.2.82a7.66 7.66 0 0 1 2.003-.27c.68.003 1.365.092 2.003.27 1.527-1.035 2.198-.82 2.198-.82.437 1.102.163 1.915.08 2.117.513.56.822 1.274.822 2.147 0 3.073-1.87 3.749-3.653 3.947.287.246.543.735.543 1.48 0 1.07-.01 1.933-.01 2.196 0 .214.144.464.55.385A8.001 8.001 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span>GitHub</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <p class="eyebrow"><span class="eyebrow-dot"></span>Technical Report · Seismic Isolation Engineering</p>
+    <h1 class="hero-title">Predictive Modeling of<br>Horizontal Stiffness<br><span class="accent-underline">in Scrap Tire Isolators</span></h1>
+    <p class="hero-subtitle">A hybrid FEM&thinsp;+&thinsp;ML approach that trades destructive testing and repeated finite-element runs for a trained predictive model of <em>K<sub>h</sub></em>&nbsp;— the horizontal stiffness that governs how a scrap-tire base isolator protects a building during an earthquake.</p>
+
+    <div class="hero-cta">
+      <a href="#introduction" class="btn btn-primary">Start reading <span aria-hidden="true">→</span></a>
+      <a href="#ml-program" class="btn btn-ghost">Jump to the ML program</a>
+    </div>
+  </div>
+
+  <div class="hero-visual" aria-hidden="true">
+    <svg class="hysteresis-svg" viewBox="0 0 520 320" fill="none">
+      <g class="hyst-grid">
+        <line x1="0" y1="160" x2="520" y2="160"/>
+        <line x1="260" y1="0" x2="260" y2="320"/>
+      </g>
+      <path class="hyst-loop hyst-loop-1" d="M100,180 C130,120 160,90 260,90 C360,90 400,140 430,160 C400,190 350,230 260,230 C170,230 130,220 100,180 Z"/>
+      <path class="hyst-loop hyst-loop-2" d="M140,170 C165,130 190,110 260,110 C330,110 365,145 395,160 C365,182 330,210 260,210 C190,210 165,200 140,170 Z"/>
+    </svg>
+    <p class="hyst-caption">Force–displacement hysteresis loop, illustrative</p>
+  </div>
+
+  <ul class="stat-strip">
+    <li><span class="stat-num" data-count="350">0</span><span class="stat-label">FE isolator models</span></li>
+    <li><span class="stat-num" data-count="2089">0</span><span class="stat-label">Data points generated</span></li>
+    <li><span class="stat-num" data-count="6">0</span><span class="stat-label">ML models benchmarked</span></li>
+    <li><span class="stat-num stat-num-decimal" data-count="0.983" data-decimals="3">0</span><span class="stat-label">Best test R² (XGBoost)</span></li>
+  </ul>
+</section>
+
+<!-- ============ ABSTRACT ============ -->
+<section class="section section-abstract" id="abstract">
+  <div class="section-inner narrow">
+    <p class="kicker">Abstract</p>
+    <p class="lead-paragraph">Steel-reinforced elastomeric bearings work, but they price ordinary low-rise construction out of seismic isolation — especially in developing countries. Scrap tire rubber pad (STRP) isolators are a low-cost alternative built from discarded tires, but every change to geometry, material, or loading condition has traditionally meant another physical test or another full finite-element run. This study replaces that loop: 350 FE models of bonded and unbonded STRP isolators were generated under combined compression and cyclic shear, yielding 2,089 labeled data points, and six machine learning models were trained to predict horizontal stiffness directly from geometry, material, and boundary-condition inputs — no destructive testing required.</p>
+    <div class="keyword-row">
+      <span class="keyword-label">Keywords</span>
+      <span class="keyword-chip">Scrap tire isolator</span>
+      <span class="keyword-chip">Seismic base isolation</span>
+      <span class="keyword-chip">Finite element analysis</span>
+      <span class="keyword-chip">Machine learning</span>
+      <span class="keyword-chip">Horizontal stiffness</span>
+      <span class="keyword-chip">XGBoost</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 INTRODUCTION ============ -->
+<section class="section" id="introduction">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <div>
+        <p class="kicker">Chapter One</p>
+        <h2>Introduction &amp; Motivation</h2>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <p>Earthquake damage in low-and-mid-rise buildings is still a serious problem in developing countries, where the cost of conventional steel-reinforced elastomeric bearings puts seismic isolation out of reach for ordinary residential and rural construction. Scrap tire rubber pad (STRP) isolators close that gap: tires already combine high vertical stiffness with significant horizontal flexibility, thanks to their vulcanized rubber and steel-cord construction — and reusing them turns a waste-disposal problem into a seismic-safety solution.</p>
+        <p>Prior experimental and FE work has shown that STRP isolators depend heavily on geometry, tire type, surface pressure, and displacement amplitude, and that the <strong>bonding condition</strong> at the interface — bonded (BSTRP) versus unbonded (UBSTRP) — fundamentally changes how the isolator deforms. Unbonded isolators can roll over at the edges under large shear, which changes their stiffness behavior in ways that are hard to capture with simple formulas.</p>
+        <p>The bottleneck is design iteration: every new geometry or material combination has historically required a fresh physical test or a full nonlinear FE simulation just to extract a stiffness value. That's slow, expensive, and sometimes destructive. This study proposes a machine-learning shortcut, trained on a large FE-generated dataset, so engineers can estimate horizontal stiffness directly from known parameters.</p>
+      </div>
+
+      <aside class="callout-card">
+        <p class="callout-title">Three objectives</p>
+        <ol class="objective-list">
+          <li>Quantify how geometry, material parameters, and boundary conditions drive STRP horizontal stiffness.</li>
+          <li>Show that ML models can accurately predict that stiffness from FE-generated data.</li>
+          <li>Provide a practical pathway for preliminary design and optimization of low-cost STRP isolation systems.</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"><svg viewBox="0 0 200 24"><path d="M0,12 Q25,2 50,12 T100,12 T150,12 T200,12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+
+<!-- ============ 02 FE MODELING ============ -->
+<section class="section section-alt" id="fe-modeling">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <div>
+        <p class="kicker">Chapter Two</p>
+        <h2>Finite Element Modeling &amp; Validation</h2>
+      </div>
+    </div>
+
+    <p>All FE analysis was run in <strong>MSC Marc Mentat</strong> on square 100&nbsp;mm × 100&nbsp;mm STRP isolators, built from four bonded 12&nbsp;mm tire stacks for a total height of 48&nbsp;mm. Tread pattern and tire curvature were simplified away; what mattered was the layered rubber-and-steel-cord composite underneath.</p>
+
+    <figure class="fig">
+      <div class="fig-frame">
+        <img src="assets/images/fig-01-geometry.jpg" alt="STRP isolator geometry and steel cord cross-section" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="fig-fallback">
+          <span class="fig-fallback-label">Figure 01</span>
+          <span class="fig-fallback-code">assets/images/fig-01-geometry.jpg</span>
+        </div>
+      </div>
+      <figcaption><span class="fig-num">Fig. 01</span> Geometry and reinforcement configuration of the STRP isolator: isolator stack (a) and steel cords in a single 12&nbsp;mm tire cross-section (b).</figcaption>
+    </figure>
+
+    <h3 class="subhead">Material constitutive models</h3>
+    <p>Rubber was meshed with 8-node solid, full-integration Hermann elements — well suited to near-incompressible material without volumetric locking — and given a three-term <strong>Mooney–Rivlin</strong> hyperelastic law:</p>
+    <div class="equation-block">
+      <span class="equation">W&nbsp;=&nbsp;C<sub>10</sub>(I<sub>1</sub>&minus;3)&nbsp;+&nbsp;C<sub>01</sub>(I<sub>2</sub>&minus;3)&nbsp;+&nbsp;C<sub>11</sub>(I<sub>1</sub>&minus;3)(I<sub>2</sub>&minus;3)</span>
+    </div>
+    <p>A Prony series captured time-dependent viscoelasticity, and a Mullins-effect damage model captured stress softening under repeated cycles. Steel cords — negligible in bending, strong in tension — were modeled as four-node membrane elements embedded in the rubber host material.</p>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 1 — Rubber material parameters (Zisan &amp; Igarashi, 2021a)</p>
+      <table>
+        <thead>
+          <tr><th colspan="3">Mooney–Rivlin</th><th colspan="2">Shear Modulus (MPa)</th><th colspan="4">Prony Shear Response</th><th colspan="4">Mullins Damage</th></tr>
+          <tr><th>C₁₀</th><th>C₀₁</th><th>C₁₁</th><th>G<sub>eff</sub></th><th>G₀</th><th>δ¹</th><th>λ¹</th><th>δ²</th><th>λ²</th><th>η₁</th><th>m₁</th><th>η₂</th><th>m₂</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0.40</td><td>1.22315</td><td>0.18759</td><td>1.10</td><td>1.31</td><td>0.30</td><td>0.2</td><td>0.30</td><td>0.55</td><td>0.01</td><td>5</td><td>0.05</td><td>10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Boundary conditions &amp; loading</h3>
+    <p>Rigid top and bottom plates stood in for the superstructure and substructure. A constant 5&nbsp;MPa axial pressure represented service-level compression, after which cyclic lateral loading was applied up to 250% shear strain. Bonded contact was fully glued; unbonded contact used a bilinear Coulomb friction model (μ&nbsp;=&nbsp;0.8) that allows separation — and the rollover behavior that makes unbonded isolators interesting.</p>
+
+    <figure class="fig fig-half">
+      <div class="fig-frame">
+        <img src="assets/images/fig-02-boundary-loading.jpg" alt="FE boundary condition and lateral loading pattern" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="fig-fallback"><span class="fig-fallback-label">Figure 02</span><span class="fig-fallback-code">assets/images/fig-02-boundary-loading.jpg</span></div>
+      </div>
+      <figcaption><span class="fig-num">Fig. 02</span> Boundary condition (a) and cyclic lateral loading pattern (b).</figcaption>
+    </figure>
+
+    <h3 class="subhead">Validation against experiment</h3>
+    <p>The FE model was checked against Mishra's (2012) experimental STRP-4 specimen. Force–displacement loops matched closely, and the two tables below — horizontal stiffness and effective damping across four displacement levels — stayed within roughly 20% of each other, close enough to trust the model for the parametric sweep that follows.</p>
+
+    <figure class="fig">
+      <div class="fig-frame">
+        <img src="assets/images/fig-03-validation.jpg" alt="FE model validation against experimental hysteresis loops" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="fig-fallback"><span class="fig-fallback-label">Figure 03</span><span class="fig-fallback-code">assets/images/fig-03-validation.jpg</span></div>
+      </div>
+      <figcaption><span class="fig-num">Fig. 03</span> FE model validation — experimental vs. simulated force–displacement loops.</figcaption>
+    </figure>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 3 — Horizontal stiffness &amp; damping: experiment vs. FEA (STRP-4)</p>
+      <table>
+        <thead><tr><th>u (%t<sub>r</sub>)</th><th>K<sub>h</sub> Exp (N/mm)</th><th>K<sub>h</sub> FEA (N/mm)</th><th>Exp/FEA</th><th>Damping Exp (%)</th><th>Damping FEA (%)</th><th>Exp/FEA</th></tr></thead>
+        <tbody>
+          <tr><td>37.5</td><td>262</td><td>223</td><td>1.17</td><td>13.2</td><td>14.65</td><td>0.90</td></tr>
+          <tr><td>75</td><td>206</td><td>184</td><td>1.12</td><td>12.2</td><td>17.01</td><td>0.72</td></tr>
+          <tr><td>112.5</td><td>163</td><td>165</td><td>0.99</td><td>14.2</td><td>17.43</td><td>0.81</td></tr>
+          <tr><td>150</td><td>133</td><td>137</td><td>0.97</td><td>15.0</td><td>19.18</td><td>0.78</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"><svg viewBox="0 0 200 24"><path d="M0,12 Q25,2 50,12 T100,12 T150,12 T200,12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+
+<!-- ============ 03 PARAMETRIC STUDY ============ -->
+<section class="section" id="parametric">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <div>
+        <p class="kicker">Chapter Three</p>
+        <h2>Parametric Study</h2>
+      </div>
+    </div>
+    <p class="section-intro">With the FE model validated, every geometric, material, and boundary-condition variable gets its own sweep. Each card below is one variable, isolated, on the 72&nbsp;mm × 72&nbsp;mm × 24&nbsp;mm reference isolator unless noted otherwise.</p>
+
+    <div class="param-grid">
+
+      <article class="param-card" id="p-bonding">
+        <p class="param-tag">Boundary condition</p>
+        <h3>Bonded vs. unbonded</h3>
+        <p>BSTRP stiffness is high across the whole strain range and dips only slightly before climbing again — from 348.4&nbsp;N/mm at 25% strain down to 326.8&nbsp;N/mm at 100%, then up to 487.1&nbsp;N/mm at 250%. Unbonded (UBSTRP) softens further, bottoming out at 214.7&nbsp;N/mm at 150% strain, before <strong>full-rollover</strong> — the isolator's edges touching the ground — pushes stiffness back up to 369.7&nbsp;N/mm at 250%.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-04-bonded-vs-unbonded.jpg" alt="Influence of interface condition on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 04</span><span class="fig-fallback-code">fig-04-bonded-vs-unbonded.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-axial">
+        <p class="param-tag">Boundary condition</p>
+        <h3>Axial pressure</h3>
+        <p>Bonded isolators barely notice axial pressure — a 2 to 12&nbsp;MPa sweep lifts K<sub>h</sub> only ~2%. Unbonded isolators are the opposite story at large strain: at 250% shear, K<sub>h</sub> jumps from 166.9 to 453.8&nbsp;N/mm across the same pressure range, because higher axial load suppresses the sliding that would otherwise bleed off stiffness after rollover.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-05-axial-pressure.jpg" alt="Influence of axial pressure on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 05</span><span class="fig-fallback-code">fig-05-axial-pressure.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-friction">
+        <p class="param-tag">Boundary condition</p>
+        <h3>Friction coefficient</h3>
+        <p>Friction (μ = 0.6–1.2) barely registers below 150% shear strain — but once full-rollover kicks in, it matters a lot: at 250% strain K<sub>h</sub> rises from 313.7 to 394.8&nbsp;N/mm as μ climbs, because more friction resists sliding at the new rollover contact patch.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-06-friction-coefficient.jpg" alt="Influence of friction coefficient on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 06</span><span class="fig-fallback-code">fig-06-friction-coefficient.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-rate">
+        <p class="param-tag">Loading condition</p>
+        <h3>Loading rate</h3>
+        <p>Rubber is viscoelastic, so faster loading means stiffer response. Bonded K<sub>h</sub> at 100% strain climbs from 272.7&nbsp;N/mm at R&nbsp;=&nbsp;0.67&nbsp;s⁻¹ to 419.4&nbsp;N/mm at R&nbsp;=&nbsp;3.0&nbsp;s⁻¹ — a 53% swing driven purely by how much time the rubber's molecular chains get to relax.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-07-loading-rate.jpg" alt="Influence of loading rate on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 07</span><span class="fig-fallback-code">fig-07-loading-rate.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-hyperelastic">
+        <p class="param-tag">Material property</p>
+        <h3>Hyperelastic constants (C₁₀, C₀₁, C₁₁)</h3>
+        <p>C₁₀ and C₀₁ govern the initial shear modulus and lift stiffness at low-to-moderate strain. C₁₁ is the strain-hardening term — it does almost nothing at small strain, then dominates at large strain: at 200% shear, BSTRP stiffness rises from 283.2 to 507.2&nbsp;N/mm as C₁₁ goes from 0.05 to 0.3&nbsp;MPa, an ~80% increase.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-10-c11-effect.jpg" alt="Influence of C11 hyperelastic constant on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 10</span><span class="fig-fallback-code">fig-10-c11-effect.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-viscoelastic">
+        <p class="param-tag">Material property</p>
+        <h3>Prony viscoelastic terms</h3>
+        <p>Longer relaxation times (τ₁, τ₂) raise K<sub>h</sub> — stress just sticks around longer. Deviatoric energy multipliers (E₁, E₂) do the opposite: pushing E₁ from 0.1 to 0.5 drops BSTRP stiffness from 582.8 to 392.3&nbsp;N/mm, since a larger multiplier means more of the instantaneous modulus is available to relax away.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-13-deviatoric-energy.jpg" alt="Influence of deviatoric energy multiplier on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 13</span><span class="fig-fallback-code">fig-13-deviatoric-energy.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-mullins">
+        <p class="param-tag">Material property</p>
+        <h3>Mullins damage parameters</h3>
+        <p>Scalar factors SF₁, SF₂, and SF<sub>∞</sub> scale stiffness directly and strongly — SF<sub>∞</sub> from 0.3 to 0.8 more than doubles BSTRP stiffness at 250% strain (296.6 → 728.9&nbsp;N/mm). The relaxation parameters (RP₁, RP₂), by contrast, barely move K<sub>h</sub> at all — they shape <em>how</em> damage evolves, not how much stiffness it removes.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-16-scalar-factor-infinity.jpg" alt="Influence of scalar factor at infinity on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 16</span><span class="fig-fallback-code">fig-16-scalar-factor-infinity.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card" id="p-steel">
+        <p class="param-tag">Material property</p>
+        <h3>Steel cord Young's modulus</h3>
+        <p>Sweeping the steel reinforcement from 50,000 to 250,000&nbsp;MPa changes K<sub>h</sub> by less than 1% in most cases — in-plane shear response is governed by the rubber, not the cords. A small dependence appears only at large shear strain in unbonded isolators, once rollover engages the cords in combined bending and axial action.</p>
+        <figure class="fig fig-inline">
+          <div class="fig-frame"><img src="assets/images/fig-20-steel-modulus.jpg" alt="Influence of steel Young's modulus on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 20</span><span class="fig-fallback-code">fig-20-steel-modulus.jpg</span></div></div>
+        </figure>
+      </article>
+
+      <article class="param-card param-card-wide" id="p-geometry">
+        <p class="param-tag">Geometry</p>
+        <h3>Plan area &amp; total height</h3>
+        <p>Geometry moves K<sub>h</sub> more than anything else in the study. Holding height constant and growing the plan from 50×50&nbsp;mm to 200×200&nbsp;mm takes unbonded stiffness from 224 to 2,857&nbsp;N/mm at 25% strain — over an order of magnitude — because K<sub>h</sub> scales with the effective shear area (<em>GA/H</em>). Going the other way, taller isolators are floppier: holding the 150×150&nbsp;mm plan fixed and stretching height from 24 to 72&nbsp;mm cuts stiffness by roughly 70%, tracking the classical K<sub>h</sub>&nbsp;∝&nbsp;1/H relationship. Plan area sets the isolator's load capacity; height sets its flexibility — and a real design has to balance both.</p>
+        <div class="fig-pair">
+          <figure class="fig fig-inline">
+            <div class="fig-frame"><img src="assets/images/fig-21-plan-area.jpg" alt="Influence of plan area on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 21</span><span class="fig-fallback-code">fig-21-plan-area.jpg</span></div></div>
+          </figure>
+          <figure class="fig fig-inline">
+            <div class="fig-frame"><img src="assets/images/fig-22-total-height.jpg" alt="Influence of total height on horizontal stiffness" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 22</span><span class="fig-fallback-code">fig-22-total-height.jpg</span></div></div>
+          </figure>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"><svg viewBox="0 0 200 24"><path d="M0,12 Q25,2 50,12 T100,12 T150,12 T200,12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+
+<!-- ============ 04 ML PROGRAM ============ -->
+<section class="section section-alt" id="ml-program">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <div>
+        <p class="kicker">Chapter Four</p>
+        <h2>Machine Learning Program</h2>
+      </div>
+    </div>
+
+    <p>The parametric sweep produced <strong>2,089 data points from 350 unique FE models</strong>, spanning geometry, material behavior, and loading condition. That dataset was split 80/20 — 1,671 training samples, 418 held out for testing — and used to train six well-established supervised learning models, deliberately spanning simple and ensemble methods:</p>
+
+    <div class="model-chip-row">
+      <span class="model-chip">Random Forest <small>RF</small></span>
+      <span class="model-chip">K-Nearest Neighbors <small>KNN</small></span>
+      <span class="model-chip">Gradient Boosting <small>GB</small></span>
+      <span class="model-chip">AdaBoost <small>AB</small></span>
+      <span class="model-chip">Ridge Regression <small>LR</small></span>
+      <span class="model-chip model-chip-highlight">XGBoost <small>XB</small></span>
+    </div>
+
+    <h3 class="subhead">Input parameter space</h3>
+    <p>Every FE model varied a combination of geometric, material, and loading parameters — the full ranges are summarized below.</p>
+    <div class="table-wrap table-scroll">
+      <p class="table-title">Table 4 — Key parameter types &amp; ranges</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Unit</th><th>Range / Values</th></tr></thead>
+        <tbody>
+          <tr><td>Length</td><td>mm</td><td>50, 72, 100, 125, 150, 175, 200</td></tr>
+          <tr><td>Height</td><td>mm</td><td>24, 36, 48, 60, 72, 84</td></tr>
+          <tr><td>Thickness of rubber</td><td>mm</td><td>20–80</td></tr>
+          <tr><td>Equivalent rubber thickness</td><td>mm</td><td>2.4, 2.49</td></tr>
+          <tr><td>Tire stacks</td><td>—</td><td>2–8</td></tr>
+          <tr><td>Shape factor</td><td>—</td><td>5.21–20.83</td></tr>
+          <tr><td>Aspect ratio (L/H)</td><td>—</td><td>2–8.33</td></tr>
+          <tr><td>C₁₀, C₀₁, C₁₁</td><td>MPa</td><td>0.05–1.71</td></tr>
+          <tr><td>Rubber bulk modulus</td><td>MPa</td><td>9,739–22,274</td></tr>
+          <tr><td>Scalar factor</td><td>—</td><td>0.01–0.45</td></tr>
+          <tr><td>Relaxation parameter</td><td>mJ/mm³</td><td>5, 10, 15</td></tr>
+          <tr><td>Relaxation time</td><td>sec</td><td>0.05–10</td></tr>
+          <tr><td>Deviatoric energy multiplier</td><td>—</td><td>0.1–0.5</td></tr>
+          <tr><td>Steel Young's modulus</td><td>GPa</td><td>50, 100, 150, 200, 250</td></tr>
+          <tr><td>Axial pressure</td><td>MPa</td><td>2–12</td></tr>
+          <tr><td>Friction coefficient</td><td>—</td><td>0.6, 0.8, 1.0, 1.2</td></tr>
+          <tr><td>Shear strain</td><td>%</td><td>25, 50, 100, 150, 200, 250</td></tr>
+          <tr><td>Loading frequency</td><td>Hz</td><td>0.63–3</td></tr>
+          <tr><td>Rollover contact</td><td>—</td><td>Yes = 1, No = 0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Tuning</h3>
+    <p>Grid search handled the cheaper models (RF, KNN); XGBoost and Gradient Boosting were tuned manually against literature-informed starting points, balancing accuracy against training cost. XGBoost's final configuration: 500 estimators, learning rate 0.05, max depth 5, min child weight 5, column subsample 0.8 — chosen via 10-fold cross-validation to guard against overfitting.</p>
+
+    <h3 class="subhead">Evaluation metrics</h3>
+    <div class="metric-row">
+      <div class="metric-card"><span class="metric-name">R²</span><span class="metric-desc">Variance explained by the model — higher is better, but always rises with more predictors.</span></div>
+      <div class="metric-card"><span class="metric-name">Adj. R²</span><span class="metric-desc">R² penalized for model complexity — a fairer basis for comparing models.</span></div>
+      <div class="metric-card"><span class="metric-name">MAE</span><span class="metric-desc">Average absolute error, in N/mm — tolerant of outliers.</span></div>
+      <div class="metric-card"><span class="metric-name">RMSE</span><span class="metric-desc">Root-mean-square error — penalizes large misses more heavily.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"><svg viewBox="0 0 200 24"><path d="M0,12 Q25,2 50,12 T100,12 T150,12 T200,12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+
+<!-- ============ 05 RESULTS ============ -->
+<section class="section" id="results">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <div>
+        <p class="kicker">Chapter Five</p>
+        <h2>Results &amp; Discussion</h2>
+      </div>
+    </div>
+
+    <p>XGBoost led every metric in both phases — R²&nbsp;=&nbsp;0.998 training / 0.983 testing, with the lowest RMSE and MAE of any model. Gradient Boosting followed at a clear second. KNN, Random Forest, and Ridge Regression trailed, with KNN in particular showing the classic overfitting signature: strong on training data, weaker on the held-out set.</p>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 6 — Performance across training &amp; testing</p>
+      <table class="table-sortable">
+        <thead><tr><th>Model</th><th>Phase</th><th>R²</th><th>Adj. R²</th><th>RMSE</th><th>MAE</th></tr></thead>
+        <tbody>
+          <tr class="row-highlight"><td rowspan="2">XB</td><td>Train</td><td>0.998</td><td>0.996</td><td>23.774</td><td>13.735</td></tr>
+          <tr class="row-highlight"><td>Test</td><td>0.983</td><td>0.966</td><td>64.894</td><td>23.079</td></tr>
+          <tr><td rowspan="2">GB</td><td>Train</td><td>0.987</td><td>0.973</td><td>59.489</td><td>35.175</td></tr>
+          <tr><td>Test</td><td>0.957</td><td>0.915</td><td>103.952</td><td>45.200</td></tr>
+          <tr><td rowspan="2">KNN</td><td>Train</td><td>0.973</td><td>0.945</td><td>84.714</td><td>51.831</td></tr>
+          <tr><td>Test</td><td>0.928</td><td>0.858</td><td>135.340</td><td>75.495</td></tr>
+          <tr><td rowspan="2">RF</td><td>Train</td><td>0.948</td><td>0.896</td><td>117.363</td><td>59.814</td></tr>
+          <tr><td>Test</td><td>0.908</td><td>0.820</td><td>152.938</td><td>67.506</td></tr>
+          <tr><td rowspan="2">LR</td><td>Train</td><td>0.933</td><td>0.867</td><td>133.451</td><td>84.264</td></tr>
+          <tr><td>Test</td><td>0.900</td><td>0.806</td><td>159.104</td><td>88.069</td></tr>
+          <tr><td rowspan="2">AB</td><td>Train</td><td>0.913</td><td>0.830</td><td>151.620</td><td>106.708</td></tr>
+          <tr><td>Test</td><td>0.890</td><td>0.787</td><td>167.270</td><td>112.525</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fig-pair">
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-23-scatter-plots.jpg" alt="Scatter plots of predicted vs actual stiffness, test dataset" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 23</span><span class="fig-fallback-code">fig-23-scatter-plots.jpg</span></div></div>
+        <figcaption><span class="fig-num">Fig. 23</span> Predicted vs. actual stiffness, test dataset, all six models.</figcaption>
+      </figure>
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-24-residual-plots.jpg" alt="Residual plots of the test dataset" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure 24</span><span class="fig-fallback-code">fig-24-residual-plots.jpg</span></div></div>
+        <figcaption><span class="fig-num">Fig. 24</span> Residuals of the test dataset, all six models.</figcaption>
+      </figure>
+    </div>
+
+    <h3 class="subhead">What drives the prediction</h3>
+    <p><strong>Aspect ratio</strong> (length ÷ height) is the single most influential feature across every model — sometimes by a wide margin, as in AdaBoost, where it accounts for nearly 0.7 of total importance. XGBoost balances it against total tire stacks and isolator length; Ridge Regression spreads importance more evenly across aspect ratio, shape factor, and length.</p>
+    <figure class="fig">
+      <div class="fig-frame"><img src="assets/images/fig-25-feature-importance.jpg" alt="Feature importance across five machine learning models" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="fig-fallback"><span class="fig-fallback-label">Figure&nbsp;/&nbsp;Fig.&nbsp;3</span><span class="fig-fallback-code">fig-25-feature-importance.jpg</span></div></div>
+      <figcaption><span class="fig-num">Fig.</span> Overall effect of input features on predicted horizontal stiffness, per model.</figcaption>
+    </figure>
+
+    <h3 class="subhead">Score analysis</h3>
+    <p>Ranking each model 1 (weakest) to 6 (strongest) on R², Adjusted R², RMSE, and MAE across both phases and summing the ranks gives a single comparative score — and it tells the same story as the raw metrics.</p>
+    <div class="score-bars">
+      <div class="score-bar-row"><span class="score-bar-label">XB</span><div class="score-bar-track"><div class="score-bar-fill" style="--pct:100%"></div></div><span class="score-bar-val">48</span></div>
+      <div class="score-bar-row"><span class="score-bar-label">GB</span><div class="score-bar-track"><div class="score-bar-fill" style="--pct:83%"></div></div><span class="score-bar-val">40</span></div>
+      <div class="score-bar-row"><span class="score-bar-label">KNN</span><div class="score-bar-track"><div class="score-bar-fill" style="--pct:65%"></div></div><span class="score-bar-val">31</span></div>
+      <div class="score-bar-row"><span class="score-bar-label">RF</span><div class="score-bar-track"><div class="score-bar-fill" style="--pct:52%"></div></div><span class="score-bar-val">25</span></div>
+      <div class="score-bar-row"><span class="score-bar-label">LR</span><div class="score-bar-track"><div class="score-bar-fill" style="--pct:33%"></div></div><span class="score-bar-val">16</span></div>
+      <div class="score-bar-row"><span class="score-bar-label">AB</span><div class="score-bar-track"><div class="score-bar-fill" style="--pct:17%"></div></div><span class="score-bar-val">8</span></div>
+    </div>
+    <p class="fig-note">Final scores out of a possible 48 (Table 5). Bar length is relative to the top score.</p>
+  </div>
+</section>
+
+<div class="chapter-divider" aria-hidden="true"><svg viewBox="0 0 200 24"><path d="M0,12 Q25,2 50,12 T100,12 T150,12 T200,12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+
+<!-- ============ 06 CLOSING ============ -->
+<section class="section section-alt" id="closing">
+  <div class="section-inner narrow">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <div>
+        <p class="kicker">Chapter Six</p>
+        <h2>Closing Notes</h2>
+      </div>
+    </div>
+
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <h3>Geometry rules</h3>
+        <p>Plan area and total height dominate horizontal stiffness — aspect ratio alone explains most of what the ML models learn.</p>
+      </div>
+      <div class="takeaway-card">
+        <h3>Bonding is a mode switch</h3>
+        <p>Bonded and unbonded isolators don't just differ in magnitude — they follow fundamentally different deformation mechanisms, especially once rollover engages.</p>
+      </div>
+      <div class="takeaway-card">
+        <h3>XGBoost generalizes best</h3>
+        <p>Across every metric and both phases, gradient-boosted trees with careful tuning outperformed simpler and more complex alternatives alike.</p>
+      </div>
+      <div class="takeaway-card">
+        <h3>A practical design tool</h3>
+        <p>A trained model this accurate turns stiffness estimation into a lookup, not a simulation — real leverage for low-cost seismic isolation in resource-limited settings.</p>
+      </div>
+    </div>
+
+    <div class="statement-row">
+      <div class="statement-card">
+        <p class="statement-label">Funding</p>
+        <p>No funds, grants, or other support were received in preparation of this manuscript.</p>
+      </div>
+      <div class="statement-card">
+        <p class="statement-label">Competing interests</p>
+        <p>The authors have no relevant financial or non-financial interests to disclose.</p>
+      </div>
+    </div>
+
+    <div class="references-placeholder">
+      <p class="statement-label">References</p>
+      <p class="placeholder-note">Bibliography to be added — drop the reference list here when ready.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Predictive Modeling of Horizontal Stiffness in Scrap Tire Isolators — A Hybrid FEM-ML Approach.</p>
+    <a href="https://mdmasudazad.github.io/" target="_blank" rel="noopener">mdmasudazad.github.io</a>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
