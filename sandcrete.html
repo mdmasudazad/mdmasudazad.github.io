@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyclic Performance of RC Columns with Sandcrete Block Aggregate</title>
+<meta name="description" content="Experimental and numerical study of the cyclic behaviour of reinforced concrete columns incorporating sandcrete block aggregate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/sandcrete.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true">SC</span>
+      <span class="brand-text">Sandcrete&nbsp;RC&nbsp;Columns</span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Sections">
+      <a href="#abstract" data-nav>Abstract</a>
+      <a href="#introduction" data-nav>01 Intro</a>
+      <a href="#methods" data-nav>02 Methods</a>
+      <a href="#numerical" data-nav>03 Numerical</a>
+      <a href="#results" data-nav>04 Results</a>
+      <a href="#discussion" data-nav>05 Discussion</a>
+      <a href="#conclusions" data-nav>06 Conclusions</a>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <p class="eyebrow"><span class="eyebrow-mark">§</span>Experimental &amp; Numerical Study · Structural Engineering</p>
+    <h1 class="hero-title">Cyclic Performance of Reinforced Concrete Columns Incorporating <span class="accent-ink">Sandcrete Block Aggregate</span></h1>
+    <p class="hero-subtitle">Two full-scale cantilever RC columns — one built with sandcrete block aggregate, one with conventional brick aggregate — tested under reversed cyclic lateral loading, then cross-checked against a fiber-based nonlinear finite element model.</p>
+
+    <div class="hero-cta">
+      <a href="#abstract" class="btn btn-primary">Read the abstract</a>
+      <a href="#results" class="btn btn-ghost">Jump to results</a>
+    </div>
+  </div>
+
+  <div class="hero-visual" aria-hidden="true">
+    <svg class="crack-svg" viewBox="0 0 480 300" fill="none">
+      <line class="crack-baseline" x1="40" y1="260" x2="440" y2="260"/>
+      <path class="crack-line crack-line-1" d="M60,260 L85,190 L72,150 L100,95 L88,40"/>
+      <path class="crack-line crack-line-2" d="M60,260 L110,230 L140,235 L175,200 L190,175"/>
+      <path class="crack-line crack-line-3" d="M60,260 L45,210 L60,170 L38,120"/>
+    </svg>
+    <p class="crack-caption">Flexural crack propagation, plastic hinge region — illustrative</p>
+  </div>
+
+  <ul class="stat-strip">
+    <li><span class="stat-num" data-count="2">0</span><span class="stat-label">Full-scale column specimens</span></li>
+    <li><span class="stat-num" data-count="750">0</span><span class="stat-label">N — first-crack load, both specimens</span></li>
+    <li><span class="stat-num" data-count="5025">0</span><span class="stat-label">N — peak load, sandcrete column</span></li>
+    <li><span class="stat-num stat-num-decimal" data-count="3.09" data-decimals="2">0</span><span class="stat-label">% error, numerical vs. experimental stiffness</span></li>
+  </ul>
+</section>
+
+<!-- ============ ABSTRACT ============ -->
+<section class="section section-paper" id="abstract">
+  <div class="section-inner narrow">
+    <p class="kicker">Abstract</p>
+    <p class="lead-paragraph">Sandcrete blocks are a common low-cost masonry material, but almost nothing is known about how they behave as <em>coarse aggregate inside reinforced concrete</em> under earthquake-like reversed loading. This study casts two full-scale cantilever RC columns — one with sandcrete block aggregate, one with conventional brick aggregate — and tests both under reversed cyclic lateral loading, tracking crack development, hysteretic response, strength and stiffness degradation, and energy dissipation. A fiber-based nonlinear finite element model, calibrated against the experimental results, is then used to check whether a simplified numerical approach can reproduce that cyclic behaviour.</p>
+    <p class="lead-paragraph">The sandcrete column cracked more gradually, held onto more of its post-peak strength, and finished each cycle with less residual displacement than the brick column — despite starting from comparable initial stiffness. The numerical model tracked the experimental force–displacement response closely, reproducing the key damage mechanisms. Sandcrete aggregate looks genuinely promising for cyclic loading conditions, though the authors are careful to note this is one specimen per material — broader validation at the member and system level is still needed.</p>
+
+    <div class="highlight-box">
+      <p class="highlight-label">Highlights</p>
+      <ul class="highlight-list">
+        <li>RC columns with sandcrete block aggregate were tested under reversed cyclic loading</li>
+        <li>Sandcrete aggregate improved ductility and delayed post-peak strength degradation</li>
+        <li>Cyclic damage progressed gradually with reduced residual displacement</li>
+        <li>Numerical modeling reliably reproduced stiffness degradation and cyclic response</li>
+      </ul>
+    </div>
+
+    <div class="keyword-row">
+      <span class="keyword-label">Keywords</span>
+      <span class="keyword-chip">Sandcrete aggregate</span>
+      <span class="keyword-chip">Reinforced concrete</span>
+      <span class="keyword-chip">Cyclic loading</span>
+      <span class="keyword-chip">Seismic performance</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 INTRODUCTION ============ -->
+<section class="section" id="introduction">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <div>
+        <p class="kicker">Section One</p>
+        <h2>Introduction</h2>
+      </div>
+    </div>
+
+    <p>Fired clay bricks dominate masonry construction across the developing world, but firing them is energy-intensive and carbon-heavy — kiln emissions and clay extraction both carry a real environmental cost. Sandcrete blocks (cement, fine sand, water) are a cheaper, lower-impact alternative already widely used in tropical construction, and a growing body of research has characterized their compressive strength, density, and durability as a standalone masonry unit.</p>
+
+    <p>What's missing is what happens when sandcrete block material is reused as <strong>coarse aggregate inside structural reinforced concrete</strong> — and specifically, how it behaves under the reversed cyclic loading a real earthquake would apply. Recycled concrete and brick aggregates have been studied under cyclic loading before; sandcrete block aggregate essentially hasn't. That gap matters because seismic performance hinges on exactly the properties aggregate choice can change — stiffness degradation, strength decay, energy dissipation, residual deformation, and failure mode.</p>
+
+    <aside class="callout-card">
+      <p class="callout-title">What this study adds</p>
+      <p>One of the first combined experimental + numerical evaluations of sandcrete block aggregate under reversed cyclic loading — focused specifically on cyclic deformation capacity, hysteretic response, and stiffness degradation, rather than the static compressive-strength questions most prior sandcrete research has asked.</p>
+    </aside>
+  </div>
+</section>
+
+<div class="chapter-rule" aria-hidden="true"></div>
+
+<!-- ============ 02 MATERIALS & METHODS ============ -->
+<section class="section section-paper" id="methods">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <div>
+        <p class="kicker">Section Two</p>
+        <h2>Materials &amp; Methods</h2>
+      </div>
+    </div>
+
+    <h3 class="subhead">Material characterization</h3>
+    <p>The sandcrete blocks used were greyish, rectangular (241 × 114 × 70&nbsp;mm), averaging 3.834&nbsp;kg, made of 15% cement, 35% local sand, 15% stone dust, and 35% steel slag and stone chip aggregate in a chemical admixture. Average compressive strength came out to 13.91&nbsp;MPa and flexural strength to 5.58&nbsp;MPa.</p>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 1 — Physical properties of sandcrete blocks</p>
+      <table>
+        <thead><tr><th>Property</th><th>Description</th><th>Standard / Method</th></tr></thead>
+        <tbody>
+          <tr><td>Color</td><td>Greyish</td><td>Visual observation</td></tr>
+          <tr><td>Shape</td><td>Rectangular, flat surfaces, straight edges</td><td>Visual measurement</td></tr>
+          <tr><td>Size (L × W × H)</td><td>241 × 114 × 70 mm</td><td>Standard size measurement</td></tr>
+          <tr><td>Constituents</td><td>15% cement, 35% local sand, 15% stone dust, 35% steel slag &amp; stone chip, BASF Masterpel-777 admixture</td><td>Supplier information</td></tr>
+          <tr><td>Weight</td><td>Average 3.834 kg</td><td>Weighing</td></tr>
+          <tr><td>Water absorption capacity</td><td>10.14%</td><td>BDS 208:2009</td></tr>
+          <tr><td>Efflorescence</td><td>None observed</td><td>Visual inspection</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Sieve analysis confirmed a well-graded sandcrete aggregate (fineness modulus 2.59). Bulk specific gravity of the coarse aggregate was 1.98 (apparent specific gravity 2.528), bulk density 1186&nbsp;kg/m³, void ratio 40.37%. Water absorption of the sandcrete aggregate was 10.72%, moisture content 5.19%; fine aggregate water absorption was 3.3%.</p>
+
+    <h3 class="subhead">Concrete mix design</h3>
+    <p>Target strength was 21&nbsp;MPa, mix designed per ACI&nbsp;211.1-91. Nine cylindrical molds (150 × 300&nbsp;mm) were cast and tested at 7, 14, and 28 days, three cylinders per batch.</p>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 2 — Mix proportion, per 1&nbsp;m³ fresh concrete</p>
+      <table>
+        <thead><tr><th>Water</th><th>Cement</th><th>Sand (SSD)</th><th>Coarse aggregate (SSD)</th><th>Water/cement ratio</th><th>Slump</th></tr></thead>
+        <tbody>
+          <tr><td>205 kg</td><td>373 kg</td><td>502 kg</td><td>840 kg</td><td>0.55</td><td>100 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Specimen design &amp; fabrication</h3>
+    <p>Two rectangular columns were reinforced and cast — 125&nbsp;mm × 125&nbsp;mm section, 1050&nbsp;mm clear span, 1750&nbsp;mm total height. Reinforcement was 4-Ø12mm longitudinal bars restrained by Ø10mm stirrups at 125&nbsp;mm spacing, tied with GI wire. Concrete was placed in three compacted stages, then cured for 28 days under wet jute sacking with a drip-fed water supply — a practical substitute for a curing pond.</p>
+
+    <figure class="fig">
+      <div class="fig-frame"><img src="assets/images/fig-01a-specimen-drawing.png" alt="Structural drawing of the column specimen showing reinforcement and dimensions" loading="lazy"></div>
+      <figcaption><span class="fig-num">Fig. 1a</span> Structural design of the specimen (dimensions in mm).</figcaption>
+    </figure>
+    <div class="fig-grid-2">
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-01b-specimen-prep-1.jpg" alt="Specimen preparation photo, formwork and reinforcement cage" loading="lazy"></div>
+      </figure>
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-01b-specimen-prep-2.jpg" alt="Specimen preparation photo, casting stage" loading="lazy"></div>
+      </figure>
+    </div>
+    <p class="fig-note">Fig. 1b — Specimen preparation.</p>
+
+    <h3 class="subhead">Loading protocol &amp; test setup</h3>
+    <p>Cyclic push–pull lateral loading was applied through an actuator reacting against a wall, evenly across the top of the column, with loading and unloading cycles at increasing drift ratios (0.05% up to a planned 4% drift). The exact pattern differed slightly between the two specimens.</p>
+
+    <div class="fig-grid-2">
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-02a-loading-pattern-sandcrete.png" alt="Loading pattern for the sandcrete specimen" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 2a</span> Loading pattern, sandcrete specimen.</figcaption>
+      </figure>
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-02b-loading-pattern-brick.png" alt="Loading pattern for the brick specimen" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 2b</span> Loading pattern, brick specimen.</figcaption>
+      </figure>
+    </div>
+
+    <p>Four LVDTs tracked deflection: at the top-head centre, the top third-point, the approximate hinge location (33% of column height from the base), and the base centre. After every target drift, the column was inspected for new cracking, and ultimate load, fracture load, first-crack load, and yield-point load were all logged against their deflections.</p>
+
+    <div class="fig-grid-2">
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-03a-test-schematic.png" alt="Schematic diagram of the cyclic test setup with LVDT positions" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 3a</span> Test schematic (dimensions in mm).</figcaption>
+      </figure>
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-03b-test-setup-photo.jpg" alt="Physical photo of the cyclic loading test setup" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 3b</span> Physical testing setup.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-rule" aria-hidden="true"></div>
+
+<!-- ============ 03 NUMERICAL MODELING ============ -->
+<section class="section" id="numerical">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <div>
+        <p class="kicker">Section Three</p>
+        <h2>Numerical Modeling</h2>
+      </div>
+    </div>
+
+    <p>The cyclic response of the sandcrete-aggregate column was simulated in <strong>SeismoStruct</strong> using an inelastic, fiber-based displacement-based (DB) beam-column element. The 1.05&nbsp;m cantilever was discretized with finer meshing near the base to resolve hinge formation — enabling distributed plasticity and curvature localization under the applied displacement history.</p>
+
+    <h3 class="subhead">Material definitions</h3>
+    <p>Concrete used the nonlinear <code>con_ma</code> model, calibrated for the low-strength sandcrete aggregate concrete; reinforcement used the hysteretic <code>hyst_mat</code> steel model, with pinching and deterioration parameters set to 0.25 and 0.60 respectively to capture yielding, the Bauschinger effect, and low-cycle fatigue.</p>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 3 — Parameters used to model the column</p>
+      <table>
+        <thead><tr><th>Property</th><th>Value</th><th>Remarks</th></tr></thead>
+        <tbody>
+          <tr><td>Compressive strength, f'<sub>c</sub></td><td>16 MPa</td><td>Based on experimental testing of sandcrete aggregate concrete</td></tr>
+          <tr><td>Modulus of elasticity, E<sub>c</sub></td><td>18,800 MPa</td><td>Estimated via E<sub>c</sub> = 4700√(f'<sub>c</sub>)</td></tr>
+          <tr><td>Tensile strength, f<sub>t</sub></td><td>1.6 MPa</td><td>≈10% of compressive strength</td></tr>
+          <tr><td>Strain at peak stress</td><td>0.0020</td><td>Typical for low-strength concrete</td></tr>
+          <tr><td>Crushing strain</td><td>−0.0035</td><td>Defined as ultimate strain before failure</td></tr>
+          <tr><td>Confined concrete strength</td><td>18–20 MPa</td><td>Used in confined core region, where applied</td></tr>
+          <tr><td>Confined strain at peak</td><td>0.0025–0.0030</td><td>Slightly higher than unconfined concrete</td></tr>
+          <tr><td>Poisson's ratio</td><td>0.2</td><td>Standard value for concrete</td></tr>
+          <tr><td>Density</td><td>2400 kg/m³</td><td>Assumed, normal-weight concrete</td></tr>
+          <tr><td>Damping ratio</td><td>5%</td><td>Applied globally for dynamic response modeling</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="subhead">Boundary condition</h3>
+    <p>The column base was fully fixed (translation and rotation restrained). The cyclic displacement protocol was applied at the top control node as a fixed time-history input, replicating realistic seismic reversals with no axial load — matching the experimental design. Concrete crushing, at a strain limit of −0.0035, was set as the governing performance/failure criterion.</p>
+  </div>
+</section>
+
+<div class="chapter-rule" aria-hidden="true"></div>
+
+<!-- ============ 04 RESULTS ============ -->
+<section class="section section-paper" id="results">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <div>
+        <p class="kicker">Section Four</p>
+        <h2>Results</h2>
+      </div>
+    </div>
+
+    <h3 class="subhead">Crack development</h3>
+    <p>Both columns developed flexural-dominated cracking concentrated near the base — a plastic hinge forming as expected — and both first cracked at the same applied load, <strong>750&nbsp;N</strong>. From there the two diverged sharply.</p>
+
+    <div class="fig-grid-2">
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-04a-crack-pattern-sandcrete-final.jpg" alt="Final crack pattern of the sandcrete column" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 4a</span> Crack pattern, sandcrete column.</figcaption>
+      </figure>
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-04b-crack-pattern-brick-final.jpg" alt="Final crack pattern of the brick column" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 4b</span> Crack pattern, brick column.</figcaption>
+      </figure>
+    </div>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 4 — Comparative assessment of cracking behaviour</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Sandcrete</th><th>Brick</th></tr></thead>
+        <tbody>
+          <tr><td>Initial crack drift</td><td>−0.25% (negative)</td><td>0.25% (positive)</td></tr>
+          <tr><td>Loading phase of first crack</td><td>Pulling phase</td><td>Pushing phase</td></tr>
+          <tr><td>Applied load at first crack</td><td>750 N</td><td>750 N</td></tr>
+          <tr><td>Crack location, first crack</td><td>Bottom right side</td><td>Middle-left side</td></tr>
+          <tr><td>Displacement at first crack</td><td>−3.09 mm</td><td>3.0 mm</td></tr>
+          <tr><td>Maximum load at 1.0% drift</td><td>2100 N</td><td>1875 N</td></tr>
+          <tr><td>Maximum load at 2.5% drift</td><td>5025 N</td><td>4500 N</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Sandcrete cracked <em>gradually</em>, spread over a wider region, with limited widening in the early cycles — consistent with lower stiffness and higher deformability letting the section redistribute stress rather than concentrate it. Brick, by contrast, multiplied cracks quickly at low drift with abrupt widening — the stiffer, more angular brick aggregate concentrating stress and promoting brittle propagation.</p>
+
+    <p class="fig-note">Crack progression across increasing drift ratios, both specimens:</p>
+    <div class="fig-grid-4">
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-1.jpg" alt="Sandcrete crack progression, stage 1" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-2.jpg" alt="Sandcrete crack progression, stage 2" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-3.jpg" alt="Sandcrete crack progression, stage 3" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-4.jpg" alt="Sandcrete crack progression, stage 4" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-5.jpg" alt="Brick crack progression, stage 1" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-6.jpg" alt="Brick crack progression, stage 2" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-7.jpg" alt="Brick crack progression, stage 3" loading="lazy"></div>
+      <div class="fig-frame fig-frame-small"><img src="assets/images/fig-04-crack-progression-8.jpg" alt="Brick crack progression, stage 4" loading="lazy"></div>
+    </div>
+    <p class="fig-note">Fig. 4 — Cracking pattern at increasing drift ratios (top row: sandcrete; bottom row: brick).</p>
+
+    <h3 class="subhead">Hysteretic &amp; post-peak behaviour</h3>
+    <p>Sandcrete's hysteresis loops were relatively stable with limited pinching and gradual strength loss — and stayed symmetric in both loading directions, pointing to a flexure-dominated mechanism rather than shear or bond failure. Brick's loops were wider (more apparent energy dissipation per cycle) but pinched heavily and carried significant residual displacement — a sign of bond degradation and crack reopening on each reversal, not necessarily better seismic behaviour.</p>
+
+    <div class="fig-grid-2">
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-05a-hysteresis-sandcrete.png" alt="Experimental hysteresis curve of the sandcrete specimen" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 5a</span> Hysteresis curve, sandcrete (experimental).</figcaption>
+      </figure>
+      <figure class="fig fig-inline">
+        <div class="fig-frame"><img src="assets/images/fig-05b-hysteresis-brick.png" alt="Experimental hysteresis curve of the brick specimen" loading="lazy"></div>
+        <figcaption><span class="fig-num">Fig. 5b</span> Hysteresis curve, brick (experimental).</figcaption>
+      </figure>
+    </div>
+
+    <figure class="fig">
+      <div class="fig-frame"><img src="assets/images/fig-06-skeleton-curve.png" alt="Skeleton curve comparing sandcrete and brick specimens" loading="lazy"></div>
+      <figcaption><span class="fig-num">Fig. 6</span> Skeleton curve, sandcrete vs. brick. Comparable initial stiffness; brick peaks slightly higher, then degrades faster.</figcaption>
+    </figure>
+
+    <p>Brick reached a marginally higher peak load, but its post-peak drop was sharp — damage localized fast in the hinge region once peak strength passed. Sandcrete's post-peak decline was smoother, pointing to better ductility and stress redistribution after peak load — the more seismically desirable trait even though its peak number was lower.</p>
+
+    <h3 class="subhead">Stiffness &amp; strength degradation</h3>
+    <p>Both columns lost stiffness early on as cracking and inelastic reinforcement behaviour set in, but the pattern diverged: sandcrete degraded gradually (damage distributed within the hinge region); brick held onto stiffness longer at large drift but then dropped abruptly (localized crack opening) — so brick's apparent stiffness retention doesn't translate to better seismic performance.</p>
+
+    <figure class="fig">
+      <div class="fig-frame"><img src="assets/images/fig-07-stiffness-degradation.png" alt="Stiffness degradation curve for both specimens" loading="lazy"></div>
+      <figcaption><span class="fig-num">Fig. 7</span> Stiffness degradation, both specimens.</figcaption>
+    </figure>
+
+    <h3 class="subhead">Energy dissipation capacity</h3>
+    <p>Brick dissipated more cumulative energy at higher drift ratios (≈9.52×10⁵&nbsp;N·mm at 3% drift) than sandcrete (≈7.18×10⁵&nbsp;N·mm at 3% drift) — but that came with heavier stiffness loss and residual deformation. Sandcrete's lower, steadier energy dissipation, paired with less permanent deformation, is the profile that tends to hold up better over repeated seismic loading.</p>
+
+    <figure class="fig">
+      <div class="fig-frame"><img src="assets/images/fig-08-cumulative-energy.png" alt="Cumulative dissipated energy versus drift ratio for both specimens" loading="lazy"></div>
+      <figcaption><span class="fig-num">Fig. 8</span> Cumulative dissipated energy vs. drift ratio.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="chapter-rule" aria-hidden="true"></div>
+
+<!-- ============ 05 DISCUSSION ============ -->
+<section class="section" id="discussion">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <div>
+        <p class="kicker">Section Five</p>
+        <h2>Discussion</h2>
+      </div>
+    </div>
+
+    <h3 class="subhead">Damage mechanisms</h3>
+    <p>Sandcrete's lower stiffness and greater flexibility let strain redistribute gradually within the critical region, delaying damage localization and abrupt crack growth — consistent with how low-strength concrete systems are expected to behave. As cyclic demand increased, steady reinforcement yielding produced subtle compression damage at the outer fibers rather than a sudden failure; the numerical model captured this as steady stiffness deterioration approaching the ultimate compressive strain limit — the signature of a ductile flexural response.</p>
+
+    <h3 class="subhead">Implications for seismic performance</h3>
+    <p>Taken together, the sandcrete column shows a deformation-controlled cyclic response: gradual damage, better post-peak behaviour, less residual displacement. Brick's higher initial stiffness and peak load don't outweigh its brittle degradation and rapid strength loss under sustained cycling. Since seismic performance usually hinges more on deformation capacity and stability under repeated reversal than on peak strength alone, sandcrete's balance of strength and deformability looks like a genuinely favorable trade for cyclic or seismic-type loading.</p>
+
+    <h3 class="subhead">Experimental–numerical correlation</h3>
+    <p>The fiber-based beam-column model reproduced the sandcrete column's global cyclic response well — initial stiffness, peak load, and overall hysteretic shape all tracked closely with experiment.</p>
+
+    <div class="table-wrap">
+      <p class="table-title">Table 5 — Numerical validation</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Experimental</th><th>Numerical</th><th>% Error</th></tr></thead>
+        <tbody>
+          <tr><td>Initial stiffness</td><td>433.88 N/mm</td><td>447.30 N/mm</td><td>3.09%</td></tr>
+          <tr><td>Peak load</td><td>5025 N</td><td>5100 N</td><td>1.49%</td></tr>
+          <tr><td>Ultimate displacement</td><td>35.75 mm</td><td>40 mm</td><td>11.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure class="fig">
+      <div class="fig-frame"><img src="assets/images/fig-09-hysteresis-exp-vs-numerical.png" alt="Hysteresis curve comparing experimental and numerical results for the sandcrete specimen" loading="lazy"></div>
+      <figcaption><span class="fig-num">Fig. 9</span> Hysteresis curve, sandcrete specimen — experimental vs. numerical.</figcaption>
+    </figure>
+
+    <p>The gaps that do show up — mainly in peak force and displacement capacity — trace back to simplifications inherent in a fiber-based formulation, which doesn't explicitly model localized cracking, aggregate crushing, or bond-slip. Even so, the model reproduced stiffness degradation trends and the onset of concrete crushing well enough to be useful for preliminary seismic assessment, provided those limitations are kept in view.</p>
+  </div>
+</section>
+
+<div class="chapter-rule" aria-hidden="true"></div>
+
+<!-- ============ 06 LIMITATIONS + CONCLUSIONS ============ -->
+<section class="section section-paper" id="conclusions">
+  <div class="section-inner narrow">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <div>
+        <p class="kicker">Section Six</p>
+        <h2>Limitations &amp; Conclusions</h2>
+      </div>
+    </div>
+
+    <div class="callout-card callout-card-warn">
+      <p class="callout-title">Limitations</p>
+      <p>One specimen per aggregate type, tested under lateral cyclic loading with <strong>no axial load</strong> — so these are indicative behavioural trends, not statistically validated performance metrics. Axial load meaningfully changes ductility, stiffness degradation, and damage progression in real seismic conditions (compression can reduce deformation capacity and encourage brittle failure; tension can increase it), so results here shouldn't be generalized to axially-loaded members without further testing across multiple specimens and constant axial-load ratios.</p>
+    </div>
+
+    <div class="conclusion-grid">
+      <div class="conclusion-card">
+        <span class="conclusion-index">1</span>
+        <p>Sandcrete columns cracked more gradually and held onto more post-peak deformation capacity than brick columns, despite comparable initial stiffness.</p>
+      </div>
+      <div class="conclusion-card">
+        <span class="conclusion-index">2</span>
+        <p>Under reversed cyclic loading, sandcrete columns showed reduced residual displacement and more stable hysteretic behaviour — better deformation tolerance.</p>
+      </div>
+      <div class="conclusion-card">
+        <span class="conclusion-index">3</span>
+        <p>The numerical model agreed reasonably well with experimental force–displacement response and captured stiffness degradation and overall cyclic trends.</p>
+      </div>
+      <div class="conclusion-card">
+        <span class="conclusion-index">4</span>
+        <p>Brick retained slightly more stiffness, but its post-peak response was more brittle — lower deformation capacity under cyclic loading.</p>
+      </div>
+    </div>
+
+    <p class="closing-note">Sandcrete block aggregate shows real potential for RC members under cyclic loading. But this is a two-specimen study — broader validation with multiple specimens, axial load effects, and frame-level testing is needed before recommending it for wider structural use.</p>
+
+    <div class="references-placeholder">
+      <p class="statement-label">References</p>
+      <p class="placeholder-note">Will be updated soon.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>Cyclic Performance of Reinforced Concrete Columns Incorporating Sandcrete Block Aggregate.</p>
+    <a href="https://mdmasudazad.github.io/" target="_blank" rel="noopener">mdmasudazad.github.io</a>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script src="js/sandcrete.js"></script>
+</body>
+</html>
