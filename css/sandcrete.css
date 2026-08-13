@@ -126,7 +126,19 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing:
 }
 .main-nav a:hover { color: var(--ink); background: var(--panel); }
 .main-nav a.active { color: var(--rust); background: var(--rust-dim); }
+.github-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  padding: 8px !important;
+}
 
+.github-link svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
 
 
 .nav-toggle {
