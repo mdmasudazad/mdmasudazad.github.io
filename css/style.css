@@ -220,23 +220,20 @@ ul {
 .text-link {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-
+    gap: 8px;
     margin-top: 25px;
-
+    background: #ffffff;
     color: var(--accent-light);
-
     font-size: 14px;
     font-weight: 600;
-
+    padding: 10px 18px;
+    border-radius: 8px;
     transition: var(--transition);
 }
-
 .text-link:hover {
-    color: white;
-    transform: translateX(4px);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
 }
-
 
 /* =========================================================
    5. HEADER / NAVBAR
