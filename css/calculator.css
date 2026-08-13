@@ -40,7 +40,7 @@ header, .navbar, nav {
     top: 0;
     left: 0;
     z-index: 1000;
-    background: rgba(7, 17, 27, 0.85);
+    background: rgba(18, 31, 45, 0.90);;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -205,8 +205,8 @@ header, .navbar, nav {
 
     background:linear-gradient(
     145deg,
-    rgba(18,34,53,.96),
-    rgba(10,20,35,.98));
+    rgba(30,47,65,.96),
+    rgba(20,34,50,.98));
 
     border:1px solid rgba(255,255,255,.08);
 
@@ -439,9 +439,9 @@ header, .navbar, nav {
 .prediction-box{
 
     background:linear-gradient(
-        145deg,
-        rgba(15,30,48,.95),
-        rgba(7,16,28,.98));
+    145deg,
+    rgba(28,46,64,.95),
+    rgba(18,32,48,.98));
 
     border:1px solid rgba(90,168,255,.15);
 
@@ -526,7 +526,7 @@ header, .navbar, nav {
 
     border-radius:14px;
 
-    background:rgba(255,255,255,.03);
+    background:rgba(255,255,255,.055);
 
     border:1px solid rgba(255,255,255,.05);
 
